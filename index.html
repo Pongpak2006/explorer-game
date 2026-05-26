@@ -9,19 +9,19 @@
     
     <style>
         :root {
+            /* ลิงก์รูปภาพของคุณครู (ยังคงเดิม) */
             --bg-start: url('https://img.magnific.com/free-vector/forest-scene-with-various-forest-trees_1308-57640.jpg?semt=ais_hybrid&w=740&q=80');
             --char-boy: url('https://i.postimg.cc/mrSpgYMf/2.png');
             --char-girl: url('https://i.postimg.cc/TYysJW8r/1.png');
+            --chest-closed: url('https://cdn-icons-png.flaticon.com/512/4230/4230569.png');
+            --chest-open: url('https://cdn-icons-png.flaticon.com/512/4230/4230571.png');
             
-            /* ไอคอนแผนที่ */
+            /* ไอคอนแผนที่การ์ตูน */
             --icon-school: url('https://cdn-icons-png.flaticon.com/512/1674/1674116.png'); 
             --icon-forest: url('https://cdn-icons-png.flaticon.com/512/2892/2892461.png'); 
             --icon-cave: url('https://cdn-icons-png.flaticon.com/512/10008/10008779.png'); 
             --icon-camp: url('https://cdn-icons-png.flaticon.com/512/2855/2855365.png');
             --icon-temple: url('https://cdn-icons-png.flaticon.com/512/1423/1423372.png');
-            
-            --chest-closed: url('https://cdn-icons-png.flaticon.com/512/4230/4230569.png');
-            --chest-open: url('https://cdn-icons-png.flaticon.com/512/4230/4230571.png');
         }
 
         html, body {
@@ -38,24 +38,16 @@
         }
         .scene.active { display: flex; }
 
-        /* ปุ่ม Home กลับหน้าแรก */
-        .home-btn {
-            position: absolute; top: 15px; left: 15px; z-index: 2000;
-            background: #fff; border: 4px solid #d32f2f; border-radius: 50%;
-            width: 50px; height: 50px; display: none; justify-content: center; align-items: center;
-            font-size: 24px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.5);
-        }
-        .home-btn:active { transform: scale(0.9); }
-
         /* ================= ป้ายไม้ & UI ================= */
         .wood-panel {
             background: #a1662f; border: 8px solid #4a2e15; border-radius: 20px;
             box-shadow: inset 0 0 15px rgba(0,0,0,0.5), 0 15px 25px rgba(0,0,0,0.8);
-            padding: 30px; text-align: center; width: 85%; max-width: 450px;
+            padding: 30px; text-align: center; width: 85%; max-width: 500px;
         }
 
         .game-title {
-            white-space: nowrap; font-size: clamp(35px, 8vw, 60px); 
+            white-space: nowrap; /* บังคับให้อยู่บรรทัดเดียว */
+            font-size: clamp(35px, 6vw, 60px); 
             color: #ffca28; text-shadow: 3px 3px 0 #4a2e15, 0 0 10px #000;
             margin: 0 0 20px 0; font-weight: 900;
         }
@@ -87,7 +79,7 @@
         }
         .char-box:active { background: rgba(255,255,255,0.5); border: 4px solid #ffca28; }
 
-        /* ================= แผนที่ & ไอคอน ================= */
+        /* ================= แผนที่: เส้นทาง & ไอคอน ================= */
         #map-path { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none; }
         
         .map-node {
@@ -97,22 +89,19 @@
         }
         @keyframes bounceNode { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
-        .node-img { width: 80px; height: 80px; background-size: contain; background-repeat: no-repeat; background-position: center; }
+        .node-img { width: 75px; height: 75px; background-size: contain; background-repeat: no-repeat; background-position: center; }
         .node-label {
             background: #fff; color: #4a2e15; border: 3px solid #4a2e15; padding: 3px 12px;
-            border-radius: 15px; font-weight: 900; font-size: 16px; margin-top: 5px; white-space: nowrap;
+            border-radius: 15px; font-weight: 900; font-size: 14px; margin-top: 5px; white-space: nowrap;
         }
 
-        #map-avatar {
-            position: absolute; z-index: 50; transition: all 1.5s ease-in-out; bottom: -20%; left: -20%;
-        }
+        #map-avatar { position: absolute; z-index: 50; transition: all 1.5s ease-in-out; bottom: -20%; left: -20%; }
 
         /* ================= กล่องนำทาง (ข้างไอคอน) ================= */
         #dialogue-popup {
             position: absolute; background: #fff8e1; border: 5px solid #8b3a0f; border-radius: 20px;
             padding: 20px; color: #333; font-size: 20px; font-weight: bold; text-align: center;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.6); z-index: 1000; display: none;
-            width: 260px; transform: translateX(-50%);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.6); z-index: 1000; display: none; width: 260px; transform: translateX(-50%);
         }
         .dialogue-arrow {
             content: ''; position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%);
@@ -142,7 +131,6 @@
         #quiz-container {
             background: rgba(255,255,255,0.95); border: 8px solid #4a2e15; border-radius: 20px;
             padding: 30px; width: 90%; max-width: 500px; text-align: center; display: none; z-index: 300;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.8);
         }
         .quiz-question { font-size: 32px; color: #d32f2f; font-weight: 900; margin-bottom: 20px; }
         .quiz-btn {
@@ -155,13 +143,10 @@
 </head>
 <body>
 
-    <audio id="sfx-click" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_3d30b9bb85.mp3?filename=coin-collect-retro-8-bit-sound-effect-145251.mp3"></audio>
-    <audio id="sfx-magic" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_c35f2991dd.mp3?filename=magic-spell-6005.mp3"></audio>
-    <audio id="sfx-correct" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_924bb7eb40.mp3?filename=correct-6033.mp3"></audio>
-    <audio id="sfx-wrong" src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_c6ccf3232f.mp3?filename=negative_beeps-6008.mp3"></audio>
-    <audio id="bg-music" src="https://cdn.pixabay.com/download/audio/2022/01/21/audio_31743c58be.mp3?filename=adventure-game-music-108796.mp3" loop></audio>
-
-    <div class="home-btn" id="home-btn" onclick="location.reload()">🏠</div>
+    <audio id="sfx-click" src="https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg" preload="auto"></audio>
+    <audio id="sfx-magic" src="https://actions.google.com/sounds/v1/magic/fairy_glissando.ogg" preload="auto"></audio>
+    <audio id="sfx-correct" src="https://actions.google.com/sounds/v1/cartoon/cartoon_cowbell.ogg" preload="auto"></audio>
+    <audio id="sfx-wrong" src="https://actions.google.com/sounds/v1/cartoon/slip_and_fall.ogg" preload="auto"></audio>
 
     <div id="scene-title" class="scene active">
         <div class="wood-panel">
@@ -190,7 +175,7 @@
 
     <div id="scene-map" class="scene">
         <svg id="map-path" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <path d="M 15 80 Q 25 60 40 55 T 65 65 T 85 45 T 70 20" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-dasharray="6,6" filter="drop-shadow(0 2px 2px rgba(0,0,0,0.8))"/>
+            <path d="M 15 80 Q 25 60 40 50 T 60 40 T 80 55 T 50 20" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-dasharray="6,6" filter="drop-shadow(0 2px 2px rgba(0,0,0,0.8))"/>
         </svg>
 
         <div class="map-node" style="bottom: 15%; left: 10%;" id="node-0">
@@ -201,15 +186,15 @@
             <div class="node-img" style="background-image: var(--icon-forest);"></div>
             <div class="node-label">1. ป่าดงดิบ</div>
         </div>
-        <div class="map-node" style="bottom: 30%; left: 60%;" onclick="walkToMission(2, 30, 60)" id="node-2">
+        <div class="map-node" style="bottom: 50%; left: 60%;" onclick="walkToMission(2, 50, 60)" id="node-2">
             <div class="node-img" style="background-image: var(--icon-cave);"></div>
             <div class="node-label">2. ถ้ำลึกลับ</div>
         </div>
-        <div class="map-node" style="bottom: 50%; left: 80%;" onclick="walkToMission(3, 50, 80)" id="node-3">
+        <div class="map-node" style="bottom: 35%; left: 80%;" onclick="walkToMission(3, 35, 80)" id="node-3">
             <div class="node-img" style="background-image: var(--icon-camp);"></div>
             <div class="node-label">3. ค่ายริมน้ำ</div>
         </div>
-        <div class="map-node" style="bottom: 75%; left: 65%;" onclick="walkToMission(4, 75, 65)" id="node-4">
+        <div class="map-node" style="bottom: 75%; left: 45%;" onclick="walkToMission(4, 75, 45)" id="node-4">
             <div class="node-img" style="background-image: var(--icon-temple);"></div>
             <div class="node-label">4. วิหารโบราณ</div>
         </div>
@@ -227,26 +212,26 @@
         <div id="game-chest" onclick="openChest()"></div>
         <div class="hud" id="game-hud">
             <div style="color: #00e5ff;">💎 <span id="score">0</span></div>
-            <div style="color: #ffeb3b;">⏳ <span id="timer">0</span></div>
+            <div style="color: #ffeb3b;">⏳ <span id="timer">180</span></div>
         </div>
         <div id="game-area" style="width: 100%; height: 100%; position: relative;"></div>
         
         <div id="quiz-container">
             <div class="quiz-question">คำว่า "<span id="quiz-word">ไก่</span>" <br>มีพยัญชนะต้นหมู่อะไร?</div>
-            <button class="quiz-btn" onclick="checkQuiz('กลาง')">อักษรกลาง</button>
-            <button class="quiz-btn" style="background: #f44336; border-color: #b71c1c; box-shadow: 0 6px 0 #b71c1c;" onclick="checkQuiz('สูง')">อักษรสูง</button>
-            <button class="quiz-btn" style="background: #2196f3; border-color: #0d47a1; box-shadow: 0 6px 0 #0d47a1;" onclick="checkQuiz('ต่ำ')">อักษรต่ำ</button>
+            <button class="quiz-btn" onclick="checkQuiz('อักษรกลาง')">อักษรกลาง</button>
+            <button class="quiz-btn" style="background: #f44336; border-color: #b71c1c; box-shadow: 0 6px 0 #b71c1c;" onclick="checkQuiz('อักษรสูง')">อักษรสูง</button>
+            <button class="quiz-btn" style="background: #2196f3; border-color: #0d47a1; box-shadow: 0 6px 0 #0d47a1;" onclick="checkQuiz('อักษรต่ำ')">อักษรต่ำ</button>
         </div>
     </div>
 
     <script>
-        // ================= ระบบแก้เสียงไม่ดัง 100% =================
+        // ================= ระบบปลดล็อกเสียง (สำคัญมาก!) =================
         let audioUnlocked = false;
         document.body.addEventListener('pointerdown', function() {
             if(!audioUnlocked) {
-                ['sfx-click', 'sfx-magic', 'sfx-correct', 'sfx-wrong', 'bg-music'].forEach(id => {
+                ['sfx-click', 'sfx-magic', 'sfx-correct', 'sfx-wrong'].forEach(id => {
                     let a = document.getElementById(id);
-                    a.volume = 0; a.play().catch(e=>{}); a.pause(); a.currentTime = 0; a.volume = 1;
+                    if(a) { a.volume = 0; a.play().catch(e=>{}); a.pause(); a.currentTime = 0; a.volume = 1; }
                 });
                 audioUnlocked = true;
             }
@@ -259,8 +244,7 @@
 
         // ================= ข้อมูลเกม =================
         let playerName = "", currentScore = 0, gameTimer, spawnInterval, itemsSpawned = 0;
-        let currentMission = 1; // 1=กลาง, 2=สูง, 3.1=ต่ำเดี่ยว, 3.2=ต่ำคู่, 4=บอส
-        let subMission3 = 1; // 1=เดี่ยว, 2=คู่
+        let currentMission = 1, subMission3 = 1; 
 
         const midConsonants = ['ก','จ','ด','ต','บ','ป','อ'];
         const highConsonants = ['ข','ฉ','ฐ','ถ','ผ','ฝ','ศ','ษ','ส','ห'];
@@ -268,14 +252,13 @@
         const lowDouble = ['ค','ฅ','ฆ','ช','ซ','ฌ','ฑ','ฒ','ท','ธ','พ','ฟ','ภ','ฮ'];
         const allConsonants = midConsonants.concat(highConsonants, lowSingle, lowDouble);
 
-        // คำศัพท์สำหรับด่าน 4 (30 ข้อ)
         const bossWords = [
-            {w:"ไก่", a:"กลาง"}, {w:"ไข่", a:"สูง"}, {w:"ควาย", a:"ต่ำ"}, {w:"ช้าง", a:"ต่ำ"}, {w:"เด็ก", a:"กลาง"},
-            {w:"ถุง", a:"สูง"}, {w:"ปลา", a:"กลาง"}, {w:"ผึ้ง", a:"สูง"}, {w:"ม้า", a:"ต่ำ"}, {w:"ยุง", a:"ต่ำ"},
-            {w:"ดาว", a:"กลาง"}, {w:"เสือ", a:"สูง"}, {w:"เรือ", a:"ต่ำ"}, {w:"นก", a:"ต่ำ"}, {w:"อ่าง", a:"กลาง"},
-            {w:"หมา", a:"สูง"}, {w:"เต่า", a:"กลาง"}, {w:"ลิง", a:"ต่ำ"}, {w:"จาน", a:"กลาง"}, {w:"ฝน", a:"สูง"},
-            {w:"ใบไม้", a:"กลาง"}, {w:"ศาลา", a:"สูง"}, {w:"แพ", a:"ต่ำ"}, {w:"งู", a:"ต่ำ"}, {w:"ข้าว", a:"สูง"},
-            {w:"ธง", a:"ต่ำ"}, {w:"บ้าน", a:"กลาง"}, {w:"เสื้อ", a:"สูง"}, {w:"แมว", a:"ต่ำ"}, {w:"ปู", a:"กลาง"}
+            {w:"ไก่", a:"อักษรกลาง"}, {w:"ไข่", a:"อักษรสูง"}, {w:"ควาย", a:"อักษรต่ำ"}, {w:"ช้าง", a:"อักษรต่ำ"}, {w:"เด็ก", a:"อักษรกลาง"},
+            {w:"ถุง", a:"อักษรสูง"}, {w:"ปลา", a:"อักษรกลาง"}, {w:"ผึ้ง", a:"อักษรสูง"}, {w:"ม้า", a:"อักษรต่ำ"}, {w:"ยุง", a:"อักษรต่ำ"},
+            {w:"ดาว", a:"อักษรกลาง"}, {w:"เสือ", a:"อักษรสูง"}, {w:"เรือ", a:"อักษรต่ำ"}, {w:"นก", a:"อักษรต่ำ"}, {w:"อ่าง", a:"อักษรกลาง"},
+            {w:"หมา", a:"อักษรสูง"}, {w:"เต่า", a:"อักษรกลาง"}, {w:"ลิง", a:"อักษรต่ำ"}, {w:"จาน", a:"อักษรกลาง"}, {w:"ฝน", a:"อักษรสูง"},
+            {w:"ใบไม้", a:"อักษรกลาง"}, {w:"ศาลา", a:"อักษรสูง"}, {w:"แพ", a:"อักษรต่ำ"}, {w:"งู", a:"อักษรต่ำ"}, {w:"ข้าว", a:"อักษรสูง"},
+            {w:"ธง", a:"อักษรต่ำ"}, {w:"บ้าน", a:"อักษรกลาง"}, {w:"เสื้อ", a:"อักษรสูง"}, {w:"แมว", a:"อักษรต่ำ"}, {w:"ปู", a:"อักษรกลาง"}
         ];
         let quizIndex = 0;
 
@@ -289,11 +272,6 @@
             playerName = document.getElementById('input-name').value;
             if(!playerName) { alert('พิมพ์ชื่อก่อนน้า!'); return; }
             playSfx('sfx-click');
-            
-            let bgm = document.getElementById('bg-music');
-            bgm.volume = 0.3; bgm.play();
-            
-            document.getElementById('home-btn').style.display = 'flex';
             switchScene('scene-char');
         }
 
@@ -302,7 +280,6 @@
             playSfx('sfx-click');
             const avatarUrl = gender === 'boy' ? 'url("https://i.postimg.cc/mrSpgYMf/2.png")' : 'url("https://i.postimg.cc/TYysJW8r/1.png")';
             document.getElementById('map-avatar').style.backgroundImage = avatarUrl;
-            
             switchScene('scene-map');
 
             setTimeout(() => {
@@ -310,7 +287,6 @@
                 avatar.style.bottom = '15%'; avatar.style.left = '10%';
                 showPopupDialogue('node-0', [
                     `ยินดีต้อนรับนักสำรวจ ${playerName}!`,
-                    `จุดเริ่มต้นของเราคือโรงเรียน`,
                     `แตะที่ "1. ป่าดงดิบ" เพื่อเริ่มภารกิจแรก!`
                 ]);
             }, 500);
@@ -320,14 +296,11 @@
         let dialogueStack = [], dialogueCallback = null;
         function showPopupDialogue(nodeId, list, callback) {
             dialogueStack = list; dialogueCallback = callback;
-            
             let node = document.getElementById(nodeId);
             let popup = document.getElementById('dialogue-popup');
-            
             popup.style.bottom = (parseInt(node.style.bottom) + 15) + '%';
             popup.style.left = node.style.left;
             popup.style.display = 'block';
-            
             nextDialogue();
         }
 
@@ -348,25 +321,23 @@
             currentMission = missionId;
             
             let avatar = document.getElementById('map-avatar');
-            avatar.style.bottom = bottomPercent + '%';
-            avatar.style.left = (leftPercent + 5) + '%';
+            avatar.style.bottom = bottomPercent + '%'; avatar.style.left = (leftPercent + 5) + '%';
 
             let msg = [];
-            if(missionId === 1) msg = [`ถึงป่าดงดิบแล้ว!`, `ภารกิจอักษรกลางรออยู่ พร้อมไหม?`];
-            if(missionId === 2) msg = [`ถึงถ้ำลึกลับแล้ว!`, `ภารกิจอักษรสูงรออยู่ พร้อมไหม?`];
+            if(missionId === 1) msg = [`ถึงป่าดงดิบแล้ว!`, `พร้อมเข้าสู่ภารกิจที่ 1 ไหม?`];
+            if(missionId === 2) msg = [`ถึงถ้ำลึกลับแล้ว!`, `พร้อมเข้าสู่ภารกิจที่ 2 ไหม?`];
             if(missionId === 3) {
-                if(subMission3 === 1) msg = [`ถึงค่ายริมน้ำแล้ว!`, `ภารกิจที่ 3 มี 2 รอบนะ! เริ่มที่ "อักษรต่ำเดี่ยว" ก่อน`];
-                else msg = [`เยี่ยมมาก! มาต่อรอบที่ 2 "อักษรต่ำคู่" กันเลย!`];
+                if(subMission3 === 1) msg = [`ภารกิจที่ 3 มี 2 รอบ!`, `เริ่มที่ "อักษรต่ำเดี่ยว" ก่อน`];
+                else msg = [`เยี่ยม! มาต่อรอบที่ 2 "อักษรต่ำคู่" กัน!`];
             }
-            if(missionId === 4) msg = [`ถึงวิหารโบราณแล้ว!`, `บอสเตรียมคำถามไว้ 30 ข้อ ไปลุยกันเลย!`];
+            if(missionId === 4) msg = [`ถึงวิหารโบราณแล้ว!`, `บอสเตรียมคำถาม 30 ข้อ ลุยเลย!`];
 
             setTimeout(() => {
                 showPopupDialogue(`node-${missionId}`, msg, () => {
                     switchScene('scene-game');
                     document.getElementById('quiz-container').style.display = 'none';
                     let chest = document.getElementById('game-chest');
-                    chest.style.backgroundImage = 'var(--chest-closed)';
-                    chest.style.display = 'block';
+                    chest.style.backgroundImage = 'var(--chest-closed)'; chest.style.display = 'block';
                 });
             }, 1500);
         }
@@ -379,22 +350,19 @@
             
             setTimeout(() => {
                 chest.style.display = 'none';
-                
                 let mapMsg = "";
-                if(currentMission === 1) mapMsg = "ไก่ จิก เด็ก ตาย เด็ก ตาย บน ปาก โอ่ง<br>(หาอักษรกลาง 10 ตัว)";
-                if(currentMission === 2) mapMsg = "ผี ฝาก ถุง ข้าวสาร ให้ ฉัน<br>(หาอักษรสูง 10 ตัว)";
-                if(currentMission === 3 && subMission3 === 1) mapMsg = "งูใหญ่ นอนอยู่ ณ ริมวัด โมฬีโลก<br>(หาอักษรต่ำเดี่ยว 10 ตัว)";
-                if(currentMission === 3 && subMission3 === 2) mapMsg = "พ่อค้า ฟันทอง ซื้อช้าง ฮ่อ<br>(หาอักษรต่ำคู่ 10 ตัว)";
+                if(currentMission === 1) mapMsg = "ไก่ จิก เด็ก ตาย... (หาอักษรกลาง 10 ตัว)";
+                if(currentMission === 2) mapMsg = "ผี ฝาก ถุง ข้าวสาร... (หาอักษรสูง 10 ตัว)";
+                if(currentMission === 3 && subMission3 === 1) mapMsg = "งูใหญ่ นอนอยู่... (หาอักษรต่ำเดี่ยว 10 ตัว)";
+                if(currentMission === 3 && subMission3 === 2) mapMsg = "พ่อค้า ฟันทอง... (หาอักษรต่ำคู่ 10 ตัว)";
                 if(currentMission === 4) mapMsg = "ตอบคำถาม 30 ข้อ เพื่อปราบวิหาร!";
 
                 Swal.fire({
-                    title: 'เจอลายแทงสมบัติ!', html: mapMsg,
-                    imageUrl: 'https://cdn-icons-png.flaticon.com/512/7517/7517228.png', 
-                    imageWidth: 150, confirmButtonText: 'เริ่มเกม!', confirmButtonColor: '#8b5a2b',
-                    background: '#fff8e1', backdrop: `rgba(0,0,0,0.8)`
+                    title: 'เจอลายแทงสมบัติ!', text: mapMsg,
+                    imageUrl: 'https://cdn-icons-png.flaticon.com/512/7517/7517228.png', imageWidth: 150,
+                    confirmButtonText: 'เริ่มเกม!', confirmButtonColor: '#8b5a2b', background: '#fff8e1'
                 }).then(() => {
-                    if(currentMission === 4) startBossGame();
-                    else startGame();
+                    if(currentMission === 4) startBossGame(); else startGame();
                 });
             }, 800);
         }
@@ -402,8 +370,7 @@
         // ================= มินิเกม 1-3 =================
         function startGame() {
             document.getElementById('game-hud').style.display = 'flex';
-            let timeLeft = 180; // 3 นาที
-            currentScore = 0; itemsSpawned = 0;
+            let timeLeft = 180; currentScore = 0; itemsSpawned = 0;
             document.getElementById('score').innerText = currentScore;
             document.getElementById('timer').innerText = timeLeft;
 
@@ -416,11 +383,10 @@
         }
 
         function spawnItem() {
-            if(itemsSpawned >= 20) return; // ออกครบ 20 ตัวหยุดเกิด
+            if(itemsSpawned >= 20) return; 
             itemsSpawned++;
 
             let targetArr = currentMission === 1 ? midConsonants : currentMission === 2 ? highConsonants : subMission3 === 1 ? lowSingle : lowDouble;
-            
             let isTarget = Math.random() > 0.4;
             let char = isTarget ? targetArr[Math.floor(Math.random()*targetArr.length)] : allConsonants[Math.floor(Math.random()*allConsonants.length)];
             
@@ -446,22 +412,18 @@
                     document.getElementById('score').innerText = currentScore;
                     this.style.background = "#8bc34a"; this.style.color = "#fff";
                 } else {
-                    playSfx('sfx-wrong');
-                    this.style.background = "#d32f2f"; this.style.color = "#fff";
+                    playSfx('sfx-wrong'); this.style.background = "#d32f2f"; this.style.color = "#fff";
                 }
                 this.style.transform = 'scale(0)';
                 setTimeout(() => { 
                     this.remove(); 
-                    if(currentScore >= 10) endGame(true); // ถูก 10 ผ่านเลย
+                    if(currentScore >= 10) endGame(true); 
                     else if(itemsSpawned >= 20 && document.getElementById('game-area').childElementCount === 0) checkWinCondition();
                 }, 200);
             };
         }
 
-        function checkWinCondition() {
-            if(currentScore >= 10) endGame(true);
-            else endGame(false);
-        }
+        function checkWinCondition() { if(currentScore >= 10) endGame(true); else endGame(false); }
 
         function endGame(isWin) {
             clearInterval(gameTimer); clearInterval(spawnInterval);
@@ -471,14 +433,12 @@
             if(isWin) {
                 if(currentMission === 3 && subMission3 === 1) {
                     Swal.fire({ title: "ผ่านรอบแรก!", text: "เตรียมลุย ต่ำคู่ ต่อเลย", icon: "success" })
-                    .then(() => { subMission3 = 2; switchScene('scene-map'); walkToMission(3, 50, 80); });
+                    .then(() => { subMission3 = 2; switchScene('scene-map'); walkToMission(3, 35, 80); });
                 } else {
-                    Swal.fire({ title: "เก่งมาก!", text: "ผ่านด่านนี้แล้ว ไปต่อกันเลย", icon: "success" })
-                    .then(() => { switchScene('scene-map'); });
+                    Swal.fire({ title: "เก่งมาก!", text: "ผ่านด่านนี้แล้ว ไปต่อกันเลย", icon: "success" }).then(() => { switchScene('scene-map'); });
                 }
             } else {
-                Swal.fire({ title: "ไม่ผ่านด่าน!", text: "ต้องเก็บให้ได้ 10 ตัวนะ ลองใหม่", icon: "error" })
-                .then(() => { switchScene('scene-map'); });
+                Swal.fire({ title: "ไม่ผ่านด่าน!", text: "ต้องเก็บให้ได้ 10 ตัวนะ ลองใหม่", icon: "error" }).then(() => { switchScene('scene-map'); });
             }
         }
 
@@ -486,8 +446,7 @@
         function startBossGame() {
             document.getElementById('game-hud').style.display = 'flex';
             document.getElementById('quiz-container').style.display = 'block';
-            let timeLeft = 240; // 4 นาที
-            currentScore = 0; quizIndex = 0;
+            let timeLeft = 240; currentScore = 0; quizIndex = 0;
             document.getElementById('score').innerText = currentScore;
             document.getElementById('timer').innerText = timeLeft;
 
@@ -495,7 +454,6 @@
                 timeLeft--; document.getElementById('timer').innerText = timeLeft;
                 if(timeLeft <= 0) endBoss(false);
             }, 1000);
-
             showQuiz();
         }
 
@@ -506,20 +464,17 @@
 
         function checkQuiz(ans) {
             if(bossWords[quizIndex].a === ans) {
-                playSfx('sfx-correct'); currentScore++;
-                document.getElementById('score').innerText = currentScore;
-            } else {
-                playSfx('sfx-wrong');
-            }
+                playSfx('sfx-correct'); currentScore++; document.getElementById('score').innerText = currentScore;
+            } else { playSfx('sfx-wrong'); }
             quizIndex++; showQuiz();
         }
 
-        function endBoss(isWin) {
+        function endBoss() {
             clearInterval(gameTimer);
             document.getElementById('quiz-container').style.display = 'none';
             document.getElementById('game-hud').style.display = 'none';
 
-            let totalDiamonds = Math.floor(currentScore / 2); // 2 ข้อ = 1 เพชร
+            let totalDiamonds = Math.floor(currentScore / 2);
             let stars = totalDiamonds >= 12 ? "⭐⭐⭐" : totalDiamonds >= 8 ? "⭐⭐" : "⭐";
 
             Swal.fire({
@@ -527,7 +482,7 @@
                 html: `คุณตอบถูก ${currentScore} ข้อ<br>ได้รับเพชร ${totalDiamonds} 💎<br>ระดับ: ${stars}`,
                 imageUrl: 'https://cdn-icons-png.flaticon.com/512/4230/4230571.png', 
                 imageWidth: 200, confirmButtonText: 'ยอดเยี่ยม!', background: '#fff8e1'
-            }).then(() => { switchScene('scene-title'); }); // กลับหน้าแรกเมื่อจบเกม
+            }).then(() => { location.reload(); });
         }
     </script>
 </body>
