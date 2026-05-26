@@ -9,19 +9,23 @@
     
     <style>
         :root {
-            /* ลิงก์รูปภาพของคุณครู (ยังคงเดิม) */
+            /* 1. รูปพื้นหลัง */
             --bg-start: url('https://img.magnific.com/free-vector/forest-scene-with-various-forest-trees_1308-57640.jpg?semt=ais_hybrid&w=740&q=80');
+            
+            /* 2. รูปตัวละคร (แนะนำ PNG โปร่งใส ขนาด 300x300 px) */
             --char-boy: url('https://i.postimg.cc/mrSpgYMf/2.png');
             --char-girl: url('https://i.postimg.cc/TYysJW8r/1.png');
+            
+            /* 3. รูปไอคอนด่านต่างๆ (แนะนำ PNG โปร่งใส ขนาด 200x200 px) */
+            --icon-school: url('https://cdn-icons-png.flaticon.com/512/1674/1674116.png'); /* โรงเรียน */
+            --icon-forest: url('https://cdn-icons-png.flaticon.com/512/2892/2892461.png'); /* ป่า */
+            --icon-cave: url('https://cdn-icons-png.flaticon.com/512/10008/10008779.png'); /* ถ้ำ */
+            --icon-camp: url('https://cdn-icons-png.flaticon.com/512/2855/2855365.png'); /* ค่าย */
+            --icon-temple: url('https://cdn-icons-png.flaticon.com/512/1423/1423372.png'); /* วิหาร */
+            
+            /* รูปหีบสมบัติ */
             --chest-closed: url('https://cdn-icons-png.flaticon.com/512/4230/4230569.png');
             --chest-open: url('https://cdn-icons-png.flaticon.com/512/4230/4230571.png');
-            
-            /* ไอคอนแผนที่การ์ตูน */
-            --icon-school: url('https://cdn-icons-png.flaticon.com/512/1674/1674116.png'); 
-            --icon-forest: url('https://cdn-icons-png.flaticon.com/512/2892/2892461.png'); 
-            --icon-cave: url('https://cdn-icons-png.flaticon.com/512/10008/10008779.png'); 
-            --icon-camp: url('https://cdn-icons-png.flaticon.com/512/2855/2855365.png');
-            --icon-temple: url('https://cdn-icons-png.flaticon.com/512/1423/1423372.png');
         }
 
         html, body {
@@ -38,16 +42,16 @@
         }
         .scene.active { display: flex; }
 
-        /* ================= ป้ายไม้ & UI ================= */
+        /* ================= UI หน้าแรก ================= */
         .wood-panel {
             background: #a1662f; border: 8px solid #4a2e15; border-radius: 20px;
             box-shadow: inset 0 0 15px rgba(0,0,0,0.5), 0 15px 25px rgba(0,0,0,0.8);
-            padding: 30px; text-align: center; width: 85%; max-width: 500px;
+            padding: 30px; text-align: center; width: 85%; max-width: 500px; z-index: 100;
         }
 
         .game-title {
-            white-space: nowrap; /* บังคับให้อยู่บรรทัดเดียว */
-            font-size: clamp(35px, 6vw, 60px); 
+            white-space: nowrap; /* บังคับให้อยู่บรรทัดเดียวแน่นอน */
+            font-size: clamp(30px, 6vw, 60px); 
             color: #ffca28; text-shadow: 3px 3px 0 #4a2e15, 0 0 10px #000;
             margin: 0 0 20px 0; font-weight: 900;
         }
@@ -55,7 +59,7 @@
         #input-name {
             padding: 12px; font-size: 22px; border-radius: 10px; border: 4px solid #5c3a21;
             text-align: center; margin-bottom: 20px; width: 80%; font-family: 'Sarabun';
-            background: #fff8e1; color: #4a2e15; font-weight: bold;
+            background: #fff8e1; color: #4a2e15; font-weight: bold; outline: none;
         }
 
         .wood-btn {
@@ -65,6 +69,15 @@
             box-shadow: 0 6px 0 #4a2e15, 0 10px 10px rgba(0,0,0,0.5); transition: 0.1s;
         }
         .wood-btn:active { transform: translateY(6px); box-shadow: 0 0 0 #4a2e15; }
+
+        /* ปุ่ม Home กลับหน้าแรก */
+        .home-btn {
+            position: absolute; top: 15px; left: 15px; z-index: 2000;
+            background: #fff; border: 4px solid #d32f2f; border-radius: 50%;
+            width: 50px; height: 50px; display: none; justify-content: center; align-items: center;
+            font-size: 24px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+        }
+        .home-btn:active { transform: scale(0.9); }
 
         /* ================= ตัวละคร ================= */
         .char-model {
@@ -79,45 +92,53 @@
         }
         .char-box:active { background: rgba(255,255,255,0.5); border: 4px solid #ffca28; }
 
-        /* ================= แผนที่: เส้นทาง & ไอคอน ================= */
+        /* ================= แผนที่: เส้นทาง & ไอคอน (แก้สมบูรณ์ 100%) ================= */
         #map-path { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none; }
         
         .map-node {
             position: absolute; display: flex; flex-direction: column; align-items: center;
-            cursor: pointer; z-index: 20; filter: drop-shadow(0 6px 6px rgba(0,0,0,0.6));
+            transform: translate(-50%, -50%); /* จัดกึ่งกลางจุดเป๊ะๆ */
+            z-index: 20; filter: drop-shadow(0 6px 6px rgba(0,0,0,0.6));
             animation: bounceNode 2s infinite ease-in-out;
         }
-        @keyframes bounceNode { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+        @keyframes bounceNode { 0%, 100% { margin-top: 0; } 50% { margin-top: -10px; } }
 
-        .node-img { width: 75px; height: 75px; background-size: contain; background-repeat: no-repeat; background-position: center; }
+        .node-img { width: 80px; height: 80px; background-size: contain; background-repeat: no-repeat; background-position: center; }
         .node-label {
-            background: #fff; color: #4a2e15; border: 3px solid #4a2e15; padding: 3px 12px;
-            border-radius: 15px; font-weight: 900; font-size: 14px; margin-top: 5px; white-space: nowrap;
+            background: #fff; color: #4a2e15; border: 3px solid #4a2e15; padding: 3px 15px;
+            border-radius: 15px; font-weight: 900; font-size: 16px; margin-top: 5px; white-space: nowrap;
         }
 
-        #map-avatar { position: absolute; z-index: 50; transition: all 1.5s ease-in-out; bottom: -20%; left: -20%; }
+        #map-avatar { 
+            position: absolute; z-index: 50; transition: all 1.5s ease-in-out; 
+            transform: translate(-50%, -50%); margin-top: -30px; /* ให้ตัวละครยืนทับบนไอคอนพอดี */
+            top: -20%; left: -20%; 
+        }
 
-        /* ================= กล่องนำทาง (ข้างไอคอน) ================= */
+        /* ================= กล่องนำทาง (ข้างๆ ตัวละคร) ================= */
         #dialogue-popup {
             position: absolute; background: #fff8e1; border: 5px solid #8b3a0f; border-radius: 20px;
             padding: 20px; color: #333; font-size: 20px; font-weight: bold; text-align: center;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.6); z-index: 1000; display: none; width: 260px; transform: translateX(-50%);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.6); z-index: 1000; display: none; width: 280px; 
+            transform: translate(-50%, -100%); margin-top: -60px;
         }
         .dialogue-arrow {
             content: ''; position: absolute; bottom: -15px; left: 50%; transform: translateX(-50%);
             border-width: 15px 15px 0; border-style: solid; border-color: #8b3a0f transparent transparent transparent;
         }
 
-        /* ================= มินิเกม 1-3 & หีบ ================= */
+        /* ================= มินิเกม & หีบ ================= */
         #game-chest {
-            width: 200px; height: 200px; background-image: var(--chest-closed);
+            width: 220px; height: 220px; background-image: var(--chest-closed);
             background-size: contain; background-repeat: no-repeat; background-position: center;
-            cursor: pointer; z-index: 200; display: none; animation: bounceNode 2s infinite ease-in-out;
+            cursor: pointer; z-index: 200; display: none; animation: floatChest 2s infinite ease-in-out;
+            filter: drop-shadow(0 15px 15px rgba(0,0,0,0.8));
         }
+        @keyframes floatChest { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
 
         .game-item {
             position: absolute; width: 90px; height: 90px; background: #fff; border: 5px solid #4a2e15; border-radius: 50%;
-            display: flex; justify-content: center; align-items: center; font-size: 50px; font-weight: 900; color: #111; cursor: pointer;
+            display: flex; justify-content: center; align-items: center; font-size: 45px; font-weight: 900; color: #111; cursor: pointer;
             box-shadow: 0 8px 0 #4a2e15; pointer-events: auto; transform: scale(0); transition: transform 0.2s;
         }
         .game-item:active { transform: scale(0.9) translateY(8px); box-shadow: 0 0 0 #4a2e15; }
@@ -127,12 +148,12 @@
             padding: 10px 20px; border-radius: 20px; display: none; gap: 20px; font-size: 26px; font-weight: 900; z-index: 500;
         }
 
-        /* ================= มินิเกม 4 (ตอบคำถามบอส) ================= */
+        /* ================= บอสไฟต์ (ด่าน 4) ================= */
         #quiz-container {
             background: rgba(255,255,255,0.95); border: 8px solid #4a2e15; border-radius: 20px;
             padding: 30px; width: 90%; max-width: 500px; text-align: center; display: none; z-index: 300;
         }
-        .quiz-question { font-size: 32px; color: #d32f2f; font-weight: 900; margin-bottom: 20px; }
+        .quiz-question { font-size: 35px; color: #d32f2f; font-weight: 900; margin-bottom: 25px; }
         .quiz-btn {
             display: block; width: 100%; background: #4caf50; border: 4px solid #1b5e20;
             color: white; font-size: 24px; font-weight: bold; padding: 15px; border-radius: 15px;
@@ -147,6 +168,9 @@
     <audio id="sfx-magic" src="https://actions.google.com/sounds/v1/magic/fairy_glissando.ogg" preload="auto"></audio>
     <audio id="sfx-correct" src="https://actions.google.com/sounds/v1/cartoon/cartoon_cowbell.ogg" preload="auto"></audio>
     <audio id="sfx-wrong" src="https://actions.google.com/sounds/v1/cartoon/slip_and_fall.ogg" preload="auto"></audio>
+    <audio id="bg-music" src="https://actions.google.com/sounds/v1/water/waves_crashing_on_rock_beach.ogg" loop preload="auto"></audio>
+
+    <div class="home-btn" id="home-btn" onclick="location.reload()">🏠</div>
 
     <div id="scene-title" class="scene active">
         <div class="wood-panel">
@@ -174,27 +198,30 @@
     </div>
 
     <div id="scene-map" class="scene">
-        <svg id="map-path" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <path d="M 15 80 Q 25 60 40 50 T 60 40 T 80 55 T 50 20" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-dasharray="6,6" filter="drop-shadow(0 2px 2px rgba(0,0,0,0.8))"/>
+        <svg id="map-path">
+            <line x1="15%" y1="80%" x2="35%" y2="55%" stroke="white" stroke-width="6" stroke-dasharray="10,10" />
+            <line x1="35%" y1="55%" x2="60%" y2="35%" stroke="white" stroke-width="6" stroke-dasharray="10,10" />
+            <line x1="60%" y1="35%" x2="80%" y2="60%" stroke="white" stroke-width="6" stroke-dasharray="10,10" />
+            <line x1="80%" y1="60%" x2="85%" y2="20%" stroke="white" stroke-width="6" stroke-dasharray="10,10" />
         </svg>
 
-        <div class="map-node" style="bottom: 15%; left: 10%;" id="node-0">
+        <div class="map-node" style="top: 80%; left: 15%;" id="node-0">
             <div class="node-img" style="background-image: var(--icon-school);"></div>
             <div class="node-label">จุดเริ่มต้น</div>
         </div>
-        <div class="map-node" style="bottom: 40%; left: 35%;" onclick="walkToMission(1, 40, 35)" id="node-1">
+        <div class="map-node" style="top: 55%; left: 35%;" id="node-1">
             <div class="node-img" style="background-image: var(--icon-forest);"></div>
             <div class="node-label">1. ป่าดงดิบ</div>
         </div>
-        <div class="map-node" style="bottom: 50%; left: 60%;" onclick="walkToMission(2, 50, 60)" id="node-2">
+        <div class="map-node" style="top: 35%; left: 60%;" id="node-2">
             <div class="node-img" style="background-image: var(--icon-cave);"></div>
             <div class="node-label">2. ถ้ำลึกลับ</div>
         </div>
-        <div class="map-node" style="bottom: 35%; left: 80%;" onclick="walkToMission(3, 35, 80)" id="node-3">
+        <div class="map-node" style="top: 60%; left: 80%;" id="node-3">
             <div class="node-img" style="background-image: var(--icon-camp);"></div>
             <div class="node-label">3. ค่ายริมน้ำ</div>
         </div>
-        <div class="map-node" style="bottom: 75%; left: 45%;" onclick="walkToMission(4, 75, 45)" id="node-4">
+        <div class="map-node" style="top: 20%; left: 85%;" id="node-4">
             <div class="node-img" style="background-image: var(--icon-temple);"></div>
             <div class="node-label">4. วิหารโบราณ</div>
         </div>
@@ -225,11 +252,11 @@
     </div>
 
     <script>
-        // ================= ระบบปลดล็อกเสียง (สำคัญมาก!) =================
+        // ================= ปลดล็อกเสียงอัตโนมัติ =================
         let audioUnlocked = false;
         document.body.addEventListener('pointerdown', function() {
             if(!audioUnlocked) {
-                ['sfx-click', 'sfx-magic', 'sfx-correct', 'sfx-wrong'].forEach(id => {
+                ['sfx-click', 'sfx-magic', 'sfx-correct', 'sfx-wrong', 'bg-music'].forEach(id => {
                     let a = document.getElementById(id);
                     if(a) { a.volume = 0; a.play().catch(e=>{}); a.pause(); a.currentTime = 0; a.volume = 1; }
                 });
@@ -242,10 +269,10 @@
             if(sound) { sound.currentTime = 0; sound.play().catch(e => console.log(e)); }
         }
 
-        // ================= ข้อมูลเกม =================
+        // ================= ข้อมูลเกมหลัก =================
         let playerName = "", currentScore = 0, gameTimer, spawnInterval, itemsSpawned = 0;
-        let currentMission = 1, subMission3 = 1; 
-
+        let storyProgress = 0; // 0=Start, 1=M1, 2=M2, 3=M3(เดี่ยว), 4=M3(คู่), 5=M4(Boss)
+        
         const midConsonants = ['ก','จ','ด','ต','บ','ป','อ'];
         const highConsonants = ['ข','ฉ','ฐ','ถ','ผ','ฝ','ศ','ษ','ส','ห'];
         const lowSingle = ['ง','ญ','น','ย','ณ','ร','ว','ม','ฬ'];
@@ -267,38 +294,81 @@
             document.getElementById(id).classList.add('active');
         }
 
-        // 1. กดเริ่มเกม
+        // 1. กดปุ่มเริ่ม
         function goToCharSelect() {
             playerName = document.getElementById('input-name').value;
             if(!playerName) { alert('พิมพ์ชื่อก่อนน้า!'); return; }
             playSfx('sfx-click');
+            document.getElementById('home-btn').style.display = 'flex';
             switchScene('scene-char');
         }
 
-        // 2. เลือกตัวละครเข้าแผนที่
+        // 2. เลือกคู่หู
         function enterMap(gender) {
             playSfx('sfx-click');
+            let bgm = document.getElementById('bg-music');
+            bgm.volume = 0.4; bgm.play().catch(e=>{});
+
             const avatarUrl = gender === 'boy' ? 'url("https://i.postimg.cc/mrSpgYMf/2.png")' : 'url("https://i.postimg.cc/TYysJW8r/1.png")';
             document.getElementById('map-avatar').style.backgroundImage = avatarUrl;
+            
             switchScene('scene-map');
-
-            setTimeout(() => {
-                let avatar = document.getElementById('map-avatar');
-                avatar.style.bottom = '15%'; avatar.style.left = '10%';
-                showPopupDialogue('node-0', [
-                    `ยินดีต้อนรับนักสำรวจ ${playerName}!`,
-                    `แตะที่ "1. ป่าดงดิบ" เพื่อเริ่มภารกิจแรก!`
-                ]);
-            }, 500);
+            resumeStory(); // เริ่มการนำทางอัตโนมัติ
         }
 
-        // 3. ระบบกล่องข้อความ
+        // ================= ระบบนำทางอัตโนมัติ (หัวใจสำคัญ!) =================
+        const nodePositions = [
+            { id: 0, top: '80%', left: '15%' }, // โรงเรียน
+            { id: 1, top: '55%', left: '35%' }, // ป่า (ด่าน 1)
+            { id: 2, top: '35%', left: '60%' }, // ถ้ำ (ด่าน 2)
+            { id: 3, top: '60%', left: '80%' }, // ค่าย (ด่าน 3)
+            { id: 4, top: '20%', left: '85%' }  // วิหาร (บอส)
+        ];
+
+        function resumeStory() {
+            let avatar = document.getElementById('map-avatar');
+            document.getElementById('dialogue-popup').style.display = 'none';
+
+            // ตรวจสอบว่ากำลังอยู่ Story ไหน แล้วเดินไปที่จุดนั้น
+            let targetNode = 0;
+            if(storyProgress === 0) targetNode = 0;
+            else if(storyProgress === 1) targetNode = 1;
+            else if(storyProgress === 2) targetNode = 2;
+            else if(storyProgress === 3 || storyProgress === 4) targetNode = 3; // ด่าน 3 เล่น 2 รอบ
+            else if(storyProgress === 5) targetNode = 4;
+
+            // สั่งตัวละครเดิน
+            avatar.style.top = nodePositions[targetNode].top;
+            avatar.style.left = nodePositions[targetNode].left;
+
+            // รอ 1.5 วิให้เดินถึง แล้วเปิดบทสนทนา
+            setTimeout(() => {
+                let msgs = [];
+                if(storyProgress === 0) msgs = [`สวัสดี ${playerName}!`, `เราจะเริ่มการผจญภัยจากโรงเรียนนะ`, `เป้าหมายแรกคือ ป่าดงดิบ! ไปกันเลย`];
+                if(storyProgress === 1) msgs = [`ถึงป่าดงดิบแล้ว!`, `ภารกิจ "อักษรกลาง" รออยู่ พร้อมไหม?`];
+                if(storyProgress === 2) msgs = [`ถึงถ้ำลึกลับแล้ว!`, `ภารกิจ "อักษรสูง" รออยู่ พร้อมไหม?`];
+                if(storyProgress === 3) msgs = [`ถึงค่ายริมน้ำ!`, `ภารกิจที่ 3 แบ่ง 2 รอบนะ เริ่มที่ "อักษรต่ำเดี่ยว" ก่อน`];
+                if(storyProgress === 4) msgs = [`เยี่ยมมาก!`, `ลุยรอบสอง "อักษรต่ำคู่" ต่อเลย!`];
+                if(storyProgress === 5) msgs = [`ถึงวิหารโบราณแล้ว!`, `เตรียมพบกับบอส 30 ข้อ ลุยเลย!`];
+
+                showPopupDialogue(`node-${targetNode}`, msgs, () => {
+                    if(storyProgress === 0) {
+                        storyProgress = 1; resumeStory(); // คุยจบ เดินไปด่าน 1 ต่อเลย
+                    } else {
+                        prepareMission(); // คุยจบ เข้าด่าน
+                    }
+                });
+            }, 1500);
+        }
+
+        // ระบบกล่องข้อความ
         let dialogueStack = [], dialogueCallback = null;
         function showPopupDialogue(nodeId, list, callback) {
             dialogueStack = list; dialogueCallback = callback;
             let node = document.getElementById(nodeId);
             let popup = document.getElementById('dialogue-popup');
-            popup.style.bottom = (parseInt(node.style.bottom) + 15) + '%';
+            
+            popup.style.top = node.style.top;
             popup.style.left = node.style.left;
             popup.style.display = 'block';
             nextDialogue();
@@ -314,32 +384,13 @@
             document.getElementById('dialogue-text').innerText = dialogueStack.shift();
         }
 
-        // 4. เดินไปด่าน
-        function walkToMission(missionId, bottomPercent, leftPercent) {
-            playSfx('sfx-click');
-            document.getElementById('dialogue-popup').style.display = 'none';
-            currentMission = missionId;
-            
-            let avatar = document.getElementById('map-avatar');
-            avatar.style.bottom = bottomPercent + '%'; avatar.style.left = (leftPercent + 5) + '%';
-
-            let msg = [];
-            if(missionId === 1) msg = [`ถึงป่าดงดิบแล้ว!`, `พร้อมเข้าสู่ภารกิจที่ 1 ไหม?`];
-            if(missionId === 2) msg = [`ถึงถ้ำลึกลับแล้ว!`, `พร้อมเข้าสู่ภารกิจที่ 2 ไหม?`];
-            if(missionId === 3) {
-                if(subMission3 === 1) msg = [`ภารกิจที่ 3 มี 2 รอบ!`, `เริ่มที่ "อักษรต่ำเดี่ยว" ก่อน`];
-                else msg = [`เยี่ยม! มาต่อรอบที่ 2 "อักษรต่ำคู่" กัน!`];
-            }
-            if(missionId === 4) msg = [`ถึงวิหารโบราณแล้ว!`, `บอสเตรียมคำถาม 30 ข้อ ลุยเลย!`];
-
-            setTimeout(() => {
-                showPopupDialogue(`node-${missionId}`, msg, () => {
-                    switchScene('scene-game');
-                    document.getElementById('quiz-container').style.display = 'none';
-                    let chest = document.getElementById('game-chest');
-                    chest.style.backgroundImage = 'var(--chest-closed)'; chest.style.display = 'block';
-                });
-            }, 1500);
+        // เตรียมเข้าด่าน
+        function prepareMission() {
+            switchScene('scene-game');
+            document.getElementById('quiz-container').style.display = 'none';
+            let chest = document.getElementById('game-chest');
+            chest.style.backgroundImage = 'var(--chest-closed)';
+            chest.style.display = 'block';
         }
 
         // 5. เปิดหีบ
@@ -351,23 +402,23 @@
             setTimeout(() => {
                 chest.style.display = 'none';
                 let mapMsg = "";
-                if(currentMission === 1) mapMsg = "ไก่ จิก เด็ก ตาย... (หาอักษรกลาง 10 ตัว)";
-                if(currentMission === 2) mapMsg = "ผี ฝาก ถุง ข้าวสาร... (หาอักษรสูง 10 ตัว)";
-                if(currentMission === 3 && subMission3 === 1) mapMsg = "งูใหญ่ นอนอยู่... (หาอักษรต่ำเดี่ยว 10 ตัว)";
-                if(currentMission === 3 && subMission3 === 2) mapMsg = "พ่อค้า ฟันทอง... (หาอักษรต่ำคู่ 10 ตัว)";
-                if(currentMission === 4) mapMsg = "ตอบคำถาม 30 ข้อ เพื่อปราบวิหาร!";
+                if(storyProgress === 1) mapMsg = "ไก่ จิก เด็ก ตาย...<br>(หาอักษรกลาง 10 ตัว)";
+                if(storyProgress === 2) mapMsg = "ผี ฝาก ถุง ข้าวสาร...<br>(หาอักษรสูง 10 ตัว)";
+                if(storyProgress === 3) mapMsg = "งูใหญ่ นอนอยู่...<br>(หาอักษรต่ำเดี่ยว 10 ตัว)";
+                if(storyProgress === 4) mapMsg = "พ่อค้า ฟันทอง...<br>(หาอักษรต่ำคู่ 10 ตัว)";
+                if(storyProgress === 5) mapMsg = "ตอบคำถาม 30 ข้อ เพื่อปราบวิหาร!";
 
                 Swal.fire({
-                    title: 'เจอลายแทงสมบัติ!', text: mapMsg,
+                    title: 'เจอลายแทงสมบัติ!', html: mapMsg,
                     imageUrl: 'https://cdn-icons-png.flaticon.com/512/7517/7517228.png', imageWidth: 150,
                     confirmButtonText: 'เริ่มเกม!', confirmButtonColor: '#8b5a2b', background: '#fff8e1'
                 }).then(() => {
-                    if(currentMission === 4) startBossGame(); else startGame();
+                    if(storyProgress === 5) startBossGame(); else startGame();
                 });
             }, 800);
         }
 
-        // ================= มินิเกม 1-3 =================
+        // ================= มินิเกม 1-4 =================
         function startGame() {
             document.getElementById('game-hud').style.display = 'flex';
             let timeLeft = 180; currentScore = 0; itemsSpawned = 0;
@@ -386,7 +437,7 @@
             if(itemsSpawned >= 20) return; 
             itemsSpawned++;
 
-            let targetArr = currentMission === 1 ? midConsonants : currentMission === 2 ? highConsonants : subMission3 === 1 ? lowSingle : lowDouble;
+            let targetArr = storyProgress === 1 ? midConsonants : storyProgress === 2 ? highConsonants : storyProgress === 3 ? lowSingle : lowDouble;
             let isTarget = Math.random() > 0.4;
             let char = isTarget ? targetArr[Math.floor(Math.random()*targetArr.length)] : allConsonants[Math.floor(Math.random()*allConsonants.length)];
             
@@ -431,18 +482,16 @@
             document.getElementById('game-hud').style.display = 'none';
             
             if(isWin) {
-                if(currentMission === 3 && subMission3 === 1) {
-                    Swal.fire({ title: "ผ่านรอบแรก!", text: "เตรียมลุย ต่ำคู่ ต่อเลย", icon: "success" })
-                    .then(() => { subMission3 = 2; switchScene('scene-map'); walkToMission(3, 35, 80); });
-                } else {
-                    Swal.fire({ title: "เก่งมาก!", text: "ผ่านด่านนี้แล้ว ไปต่อกันเลย", icon: "success" }).then(() => { switchScene('scene-map'); });
-                }
+                storyProgress++; // อัปเลเวลไปด่านต่อไป!
+                Swal.fire({ title: "เก่งมาก!", text: "ผ่านด่านนี้แล้ว ไปต่อกันเลย", icon: "success", confirmButtonColor: '#8b5a2b' })
+                .then(() => { switchScene('scene-map'); resumeStory(); });
             } else {
-                Swal.fire({ title: "ไม่ผ่านด่าน!", text: "ต้องเก็บให้ได้ 10 ตัวนะ ลองใหม่", icon: "error" }).then(() => { switchScene('scene-map'); });
+                Swal.fire({ title: "ไม่ผ่านด่าน!", text: "ต้องเก็บให้ได้ 10 ตัวนะ ลองใหม่", icon: "error", confirmButtonColor: '#d32f2f' })
+                .then(() => { switchScene('scene-map'); resumeStory(); });
             }
         }
 
-        // ================= มินิเกม 4 (บอส 30 ข้อ / 4 นาที) =================
+        // ================= บอสไฟต์ =================
         function startBossGame() {
             document.getElementById('game-hud').style.display = 'flex';
             document.getElementById('quiz-container').style.display = 'block';
@@ -452,13 +501,13 @@
 
             gameTimer = setInterval(() => {
                 timeLeft--; document.getElementById('timer').innerText = timeLeft;
-                if(timeLeft <= 0) endBoss(false);
+                if(timeLeft <= 0) endBoss();
             }, 1000);
             showQuiz();
         }
 
         function showQuiz() {
-            if(quizIndex >= 30) { endBoss(true); return; }
+            if(quizIndex >= 30) { endBoss(); return; }
             document.getElementById('quiz-word').innerText = bossWords[quizIndex].w;
         }
 
@@ -478,10 +527,9 @@
             let stars = totalDiamonds >= 12 ? "⭐⭐⭐" : totalDiamonds >= 8 ? "⭐⭐" : "⭐";
 
             Swal.fire({
-                title: "จบการผจญภัย!",
-                html: `คุณตอบถูก ${currentScore} ข้อ<br>ได้รับเพชร ${totalDiamonds} 💎<br>ระดับ: ${stars}`,
-                imageUrl: 'https://cdn-icons-png.flaticon.com/512/4230/4230571.png', 
-                imageWidth: 200, confirmButtonText: 'ยอดเยี่ยม!', background: '#fff8e1'
+                title: "ปราบวิหารสำเร็จ!", html: `คุณตอบถูก ${currentScore}/30 ข้อ<br>ได้รับเพชร ${totalDiamonds} 💎<br>ระดับความเก่ง: ${stars}`,
+                imageUrl: 'https://cdn-icons-png.flaticon.com/512/4230/4230571.png', imageWidth: 200, 
+                confirmButtonText: 'รับใบประกาศ!', confirmButtonColor: '#8bc34a', background: '#fff8e1'
             }).then(() => { location.reload(); });
         }
     </script>
