@@ -3,140 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>นักสำรวจป่า ไตรยางศ์ ป.2</title>
+    <title>ผจญภัยป่าไตรยางศ์</title>
     <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;700&display=swap" rel="stylesheet">
     <style>
         body { 
             font-family: 'Sarabun', sans-serif; 
-            background-color: #2e7d32; /* สีเขียวป่า */
-            color: white;
-            text-align: center; 
             margin: 0; 
-            padding: 20px; 
+            overflow: hidden; /* ป้องกันหน้าจอเลื่อน */
+            background-color: #1b5e20; /* สีเขียวเข้มพื้นหลัง */
+            color: white;
+            text-align: center;
         }
+
+        /* --- กล่องสำหรับแต่ละฉาก --- */
         .scene {
-            background: rgba(0, 0, 0, 0.7); 
-            max-width: 600px; 
-            margin: 0 auto; 
-            padding: 30px; 
-            border-radius: 20px; 
-            border: 4px solid #ffca28;
-            display: none; /* ซ่อนทุกหน้าไว้ก่อน */
+            position: absolute;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            display: none; 
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
         }
-        .active { display: block; /* แสดงเฉพาะหน้าที่เปิดอยู่ */ }
-        h1 { color: #ffca28; font-size: 32px; }
-        input { padding: 10px; font-size: 18px; border-radius: 10px; text-align: center; }
+        .active { display: flex; }
+
+        /* --- หน้าจอเริ่มเกม --- */
+        #scene-start {
+            background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.unsplash.com/photo-1542273917363-3b1817f69a5d?q=80&w=1000') center/cover;
+        }
+        h1 { font-size: 40px; color: #ffca28; text-shadow: 2px 2px 4px #000; }
+        
+        /* --- ป๊อปอัปเลือกตัวละคร --- */
+        .modal {
+            background: white; color: black; padding: 30px; border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            display: none; flex-direction: column; gap: 15px;
+            width: 80%; max-width: 400px; z-index: 10;
+        }
+        .char-select { display: flex; justify-content: center; gap: 20px; font-size: 50px; cursor: pointer; }
+        .char-btn { border: 2px solid transparent; border-radius: 10px; padding: 10px; background: #f0f0f0; }
+        .char-btn.selected { border-color: #ff9800; background: #ffe0b2; }
+        input { padding: 10px; font-size: 18px; border-radius: 10px; border: 1px solid #ccc; text-align: center; }
+
+        /* --- ปุ่มกด --- */
         .btn { 
             background-color: #ff9800; color: white; border: none; 
-            padding: 15px 30px; font-size: 20px; font-weight: bold;
-            border-radius: 15px; cursor: pointer; margin-top: 20px;
+            padding: 15px 30px; font-size: 22px; font-weight: bold;
+            border-radius: 15px; cursor: pointer; box-shadow: 0 4px #e65100;
+            transition: 0.2s;
         }
-        .btn:active { transform: translateY(4px); }
-        .diamond-bar { font-size: 24px; color: #00e5ff; font-weight: bold; margin-bottom: 20px; }
-        .game-area { background: white; color: black; padding: 20px; border-radius: 10px; font-size: 40px; margin: 20px 0; }
+        .btn:active { transform: translateY(4px); box-shadow: 0 0; }
+
+        /* --- แผนที่ผจญภัย --- */
+        #scene-map {
+            background: #4caf50; /* สีพื้นหญ้าจำลอง */
+            position: relative;
+        }
+        /* เส้นทางเดินบนแผนที่ (ตกแต่ง) */
+        .path-line {
+            position: absolute; border: 4px dashed #795548; z-index: 1;
+        }
+        /* จุดภารกิจ */
+        .mission-node {
+            position: absolute; width: 60px; height: 60px; 
+            background: #ff5722; border-radius: 50%; border: 4px solid white;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 24px; font-weight: bold; cursor: pointer; z-index: 2;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        /* ตัวละครบนแผนที่ */
+        #player-avatar {
+            position: absolute; font-size: 40px; z-index: 3;
+            transition: all 1s ease-in-out; /* ทำให้เดินสมูท 1 วินาที */
+            /* จุดเริ่มต้น */
+            top: 80%; left: 20%; 
+            transform: translate(-50%, -50%);
+        }
     </style>
 </head>
 <body>
 
     <div id="scene-start" class="scene active">
-        <h1>🏕️ นักสำรวจป่า ไตรยางศ์ 🏕️</h1>
-        <p>ยินดีต้อนรับนักสำรวจน้อย!</p>
-        <input type="text" id="playerName" placeholder="พิมพ์ชื่อนักสำรวจที่นี่...">
-        <br>
-        <p>เลือกเพศ: 
-            <input type="radio" name="gender" value="ชาย" checked> ชาย 
-            <input type="radio" name="gender" value="หญิง"> หญิง
-        </p>
-        <button class="btn" onclick="startGame()">เริ่มการผจญภัย!</button>
+        <h1>🏕️ ผจญภัยป่าไตรยางศ์</h1>
+        <button class="btn" onclick="openCharacterSelect()">▶ เริ่มเกม</button>
     </div>
 
-    <div id="scene-stage1" class="scene">
-        <div class="diamond-bar">💎 เพชรที่มี: <span id="diamond-count">0</span></div>
-        <h1>ภารกิจที่ 1: หีบอักษรกลาง</h1>
-        <p>ไก่ จิก เด็ก ตาย เด็ก ตาย บน ปาก โอ่ง</p>
-        <p>⏳ เวลาเหลือ: <span id="time-left" style="color: red;">15</span> วินาที</p>
-        
-        <div class="game-area">
-            <button class="btn" onclick="collectLetter('ก', true)">ก</button>
-            <button class="btn" onclick="collectLetter('ข', false)">ข</button>
-            <button class="btn" onclick="collectLetter('ป', true)">ป</button>
-            <button class="btn" onclick="collectLetter('ฮ', false)">ฮ</button>
+    <div id="character-modal" class="modal" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);">
+        <h2 style="margin: 0; color: #ff9800;">สร้างนักสำรวจ</h2>
+        <input type="text" id="playerName" placeholder="พิมพ์ชื่อของคุณ...">
+        <div class="char-select">
+            <div class="char-btn selected" id="char-boy" onclick="selectChar('👦')">👦</div>
+            <div class="char-btn" id="char-girl" onclick="selectChar('👧')">👧</div>
         </div>
-        <button class="btn" onclick="nextStage()" style="background-color: #4caf50;">จบด่าน 1 ไปต่อ</button>
+        <button class="btn" onclick="enterMap()">ออกเดินทาง!</button>
     </div>
 
-    <div id="scene-end" class="scene">
-        <h1>🎉 สรุปผลการผจญภัย 🎉</h1>
-        <p>ชื่อนักสำรวจ: <span id="show-name"></span></p>
-        <p>เพชรที่สะสมได้: <span id="show-diamonds"></span> 💎</p>
-        <p>ระดับความเก่ง: 🌟🌟🌟</p>
-        <button class="btn" onclick="saveToSheets()">บันทึกคะแนนส่งคุณครู</button>
+    <div id="scene-map" class="scene">
+        <h2 style="position: absolute; top: 20px; background: rgba(0,0,0,0.5); padding: 10px 20px; border-radius: 10px;">
+            แผนที่ป่าลึกลับ (นักสำรวจ: <span id="display-name"></span>)
+        </h2>
+        
+        <div id="player-avatar">👦</div>
+
+        <div class="mission-node" style="top: 60%; left: 40%;" onclick="walkToMission(1, 60, 40)">1</div>
+        <div class="mission-node" style="top: 30%; left: 30%;" onclick="walkToMission(2, 30, 30)">2</div>
+        <div class="mission-node" style="top: 40%; left: 70%;" onclick="walkToMission(3, 40, 70)">3</div>
+        <div class="mission-node" style="top: 15%; left: 80%; background: #9c27b0;" onclick="walkToMission(4, 15, 80)">👑</div>
     </div>
 
     <script>
-        // ตัวแปรเก็บข้อมูลผู้เล่น
-        let player = { name: "", gender: "", diamonds: 0 };
-        let timer;
-        let timeLeft = 15; // จับเวลาจำลอง 15 วินาที
+        let player = { name: "", avatar: "👦" };
 
-        // ฟังก์ชันเปลี่ยนหน้าจอ
-        function showScene(sceneId) {
-            document.querySelectorAll('.scene').forEach(el => el.classList.remove('active'));
-            document.getElementById(sceneId).classList.add('active');
+        // 1. เปิดป๊อปอัปเลือกตัวละคร
+        function openCharacterSelect() {
+            // (อนาคต: ใส่คำสั่งเล่นเสียงดนตรีตรงนี้)
+            document.getElementById('character-modal').style.display = 'flex';
         }
 
-        // เริ่มเกม
-        function startGame() {
+        // 2. เลือกตัวละคร
+        function selectChar(avatarEmoji) {
+            player.avatar = avatarEmoji;
+            document.getElementById('char-boy').classList.remove('selected');
+            document.getElementById('char-girl').classList.remove('selected');
+            if(avatarEmoji === '👦') document.getElementById('char-boy').classList.add('selected');
+            if(avatarEmoji === '👧') document.getElementById('char-girl').classList.add('selected');
+        }
+
+        // 3. ยืนยันเข้าสู่แผนที่
+        function enterMap() {
             let nameInput = document.getElementById('playerName').value;
-            if(nameInput === "") {
-                alert("อย่าลืมตั้งชื่อนักสำรวจนะ!");
+            if(nameInput.trim() === "") {
+                alert("อย่าลืมตั้งชื่อก่อนนะ!");
                 return;
             }
             player.name = nameInput;
             
-            // เปิดเสียงตื่นเต้น (ถ้ามีไฟล์เสียงสามารถใส่ตรงนี้ได้)
-            alert("พร้อมลุยป่าดงดิบแล้วใช่ไหม! ไปกันเลย!");
+            // อัปเดตข้อมูลบนแผนที่
+            document.getElementById('display-name').innerText = player.name;
+            document.getElementById('player-avatar').innerText = player.avatar;
             
-            showScene('scene-stage1');
-            startTimer();
+            // ปิดหน้าแรกและป๊อปอัป เปิดหน้าแผนที่
+            document.getElementById('character-modal').style.display = 'none';
+            document.getElementById('scene-start').classList.remove('active');
+            document.getElementById('scene-map').classList.add('active');
         }
 
-        // ระบบจับเวลา
-        function startTimer() {
-            timer = setInterval(() => {
-                timeLeft--;
-                document.getElementById('time-left').innerText = timeLeft;
-                if(timeLeft <= 0) {
-                    clearInterval(timer);
-                    alert("หมดเวลา! สรุปคะแนนกันเถอะ");
-                    nextStage();
-                }
-            }, 1000);
-        }
+        // 4. สั่งตัวละครเดินบนแผนที่
+        function walkToMission(missionNumber, topPercent, leftPercent) {
+            let avatar = document.getElementById('player-avatar');
+            
+            // (อนาคต: ใส่คำสั่งเสียงเดินป่าสวบสาบตรงนี้)
+            
+            // สั่งให้ตัวละครขยับไปที่ตำแหน่งของภารกิจ
+            avatar.style.top = topPercent + '%';
+            avatar.style.left = leftPercent + '%';
 
-        // ระบบคลิกเก็บอักษร (จำลองของตกลงมา)
-        function collectLetter(letter, isCorrect) {
-            if(isCorrect) {
-                player.diamonds += 1; // ได้เพชร
-                alert("✅ ถูกต้อง! เก็บ " + letter + " ได้ 1 เพชร");
-            } else {
-                alert("❌ ผิดจ้าา " + letter + " ไม่ใช่อักษรกลางนะ");
-            }
-            document.getElementById('diamond-count').innerText = player.diamonds;
-        }
-
-        // ไปหน้าจบเกม
-        function nextStage() {
-            clearInterval(timer); // หยุดเวลา
-            document.getElementById('show-name').innerText = player.name;
-            document.getElementById('show-diamonds').innerText = player.diamonds;
-            showScene('scene-end');
-        }
-
-        // ระบบส่งข้อมูลเข้า Google Sheets
-        function saveToSheets() {
-            alert("กำลังส่งคะแนนไปหาคุณครู... (เชื่อมกับ Google Sheets ได้ที่นี่)");
-            // โค้ด Fetch แบบที่ทำในเวอร์ชันแรกจะถูกนำมาใส่ตรงนี้
+            // รอ 1 วินาทีให้เดินเสร็จ ค่อยเด้งเข้าเกม
+            setTimeout(() => {
+                alert("เข้าสู่ภารกิจที่ " + (missionNumber === 4 ? "บอส!" : missionNumber));
+                // ตรงนี้เราจะเขียนโค้ดสลับหน้าจอเข้าไปยังมินิเกมของแต่ละด่านต่อไป
+            }, 1200);
         }
     </script>
 </body>
