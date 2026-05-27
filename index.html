@@ -19,6 +19,8 @@
             --icon-temple: url('https://i.postimg.cc/Bb3bsPrk/5.png'); 
             --chest-closed: url('https://cdn-icons-png.flaticon.com/512/4230/4230569.png');
             --chest-open: url('https://cdn-icons-png.flaticon.com/512/4230/4230571.png');
+            --boss-mask: url('https://cdn-icons-png.flaticon.com/512/2983/2983610.png');
+            --leaf: url('https://cdn-icons-png.flaticon.com/512/3264/3264104.png');
         }
 
         * { font-family: 'Sarabun', sans-serif; box-sizing: border-box; }
@@ -36,7 +38,7 @@
         }
         .scene.active { display: flex; }
 
-        /* ================= เอฟเฟกต์หิ่งห้อยเรืองแสง ================= */
+        /* ================= เอฟเฟกต์บรรยากาศ (หิ่งห้อย & ใบไม้ร่วง) ================= */
         .firefly {
             position: absolute; width: 4px; height: 4px; background: #cddc39;
             border-radius: 50%; box-shadow: 0 0 10px 4px #cddc39;
@@ -44,11 +46,28 @@
         }
         @keyframes fly { 0% { transform: translate(0, 0) scale(1); opacity: 0.5; } 100% { transform: translate(30px, -50px) scale(1.5); opacity: 1; } }
 
-        /* ================= UI หน้าแรก ================= */
+        .falling-leaf {
+            position: absolute; top: -50px; width: 25px; height: 25px;
+            background: var(--leaf) no-repeat center/contain;
+            pointer-events: none; z-index: 3; opacity: 0.6;
+            animation: fall linear infinite;
+        }
+        @keyframes fall {
+            0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translate(60px, 100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* ================= UI หน้าแรก (ลายไม้สมจริง) ================= */
         .wood-panel {
-            background: #a1662f; border: 6px solid #4a2e15; border-radius: 20px;
+            position: relative;
+            padding: 30px 30px 45px 30px;
+            background-color: #8b5a2b;
+            background-image: repeating-linear-gradient(45deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 4px), linear-gradient(to bottom, #a1662f, #70431c);
+            border: 6px solid #4a2e15; border-radius: 20px;
             box-shadow: inset 0 0 15px rgba(0,0,0,0.5), 0 15px 25px rgba(0,0,0,0.8);
-            padding: 30px; text-align: center; width: 85%; max-width: 420px; z-index: 100;
+            text-align: center; width: 85%; max-width: 420px; z-index: 100;
         }
         .game-title {
             white-space: nowrap !important;
@@ -69,14 +88,13 @@
         }
         .wood-btn:active { transform: translateY(6px); box-shadow: 0 0 0 #4a2e15; }
 
-        /* ย้ายคู่มือมาล่างสุดของหน้าจอ ไม่ให้รกป้ายไม้ */
         .manual-link {
-            position: absolute; bottom: 15px;
-            font-size: 16px; color: rgba(255, 255, 255, 0.7);
-            text-decoration: none; cursor: pointer; text-shadow: 1px 1px 2px #000; z-index: 100;
-            transition: 0.2s;
+            position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+            font-size: 15px; color: #ffca28; font-weight: bold;
+            text-decoration: none; cursor: pointer; text-shadow: 1px 1px 2px #4a2e15; z-index: 100;
+            transition: 0.2s; white-space: nowrap;
         }
-        .manual-link:hover { color: #ffca28; }
+        .manual-link:hover { color: #fff; }
 
         /* ปุ่มด้านบน (Home & Music) */
         .top-btn {
@@ -168,25 +186,109 @@
             padding: 5px 15px; border-radius: 15px; display: none; gap: 15px; font-size: 20px; font-weight: 900; z-index: 500;
         }
 
+        /* ================= Progress Bar ================= */
+        .progress-bar {
+            position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 400px; height: 25px; background: rgba(0,0,0,0.7);
+            border: 3px solid #ffca28; border-radius: 15px; overflow: hidden; z-index: 100;
+            display: none;
+        }
+        .progress-fill {
+            height: 100%; background: linear-gradient(90deg, #4caf50, #8bc34a);
+            transition: width 0.3s ease; display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 12px; font-weight: bold; text-shadow: 1px 1px 2px #000;
+        }
+
         #basket {
             position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
             width: 150px; height: 100px; background: url('https://cdn-icons-png.flaticon.com/512/3752/3752674.png') center/contain no-repeat;
             display: none; z-index: 100; pointer-events: none;
         }
 
+        /* ================= บอสไฟต์ ================= */
         #quiz-container {
             background: rgba(255,255,255,0.95); border: 6px solid #4a2e15; border-radius: 20px;
-            padding: 20px; width: 90%; max-width: 400px; text-align: center; display: none; z-index: 300;
+            padding: 20px; width: 90%; max-width: 500px; text-align: center; display: none; z-index: 300;
             max-height: 90vh; overflow-y: auto;
         }
+        
+        .quiz-header {
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 16px; color: #4a2e15; font-weight: bold; margin-bottom: 15px;
+            border-bottom: 3px solid #4a2e15; padding-bottom: 10px;
+        }
+
+        .difficulty-badge {
+            display: inline-block; padding: 5px 12px; border-radius: 20px;
+            font-size: 12px; font-weight: bold; margin-left: 10px;
+        }
+        .difficulty-easy { background: #4caf50; color: white; }
+        .difficulty-medium { background: #ff9800; color: white; }
+        .difficulty-hard { background: #f44336; color: white; }
+
+        .combo-display {
+            position: absolute; top: 60px; right: 15px; background: #ff6f00;
+            color: white; padding: 8px 15px; border-radius: 20px; font-weight: bold;
+            font-size: 18px; z-index: 501; display: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        #boss-sprite {
+            width: 110px; height: 110px; margin: -55px auto 10px auto; 
+            background: var(--boss-mask) center/contain no-repeat;
+            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));
+            animation: bossHover 2s infinite alternate; transition: 0.3s;
+        }
+        @keyframes bossHover { 0% { transform: translateY(0); } 100% { transform: translateY(-10px); } }
+        
+        .boss-hit { filter: drop-shadow(0 0 15px red) brightness(0.7) sepia(1) hue-rotate(-50deg) saturate(5) !important; transform: scale(0.9); }
+
         .quiz-question { font-size: 26px; color: #d32f2f; font-weight: 900; margin-bottom: 15px; }
-        .quiz-img-display { width: 150px; height: 150px; object-fit: contain; margin-bottom: 10px; border-radius: 10px; display: none; border: 2px dashed #4a2e15; padding: 5px; }
+        
+        /* ================= รูปภาพคำถาม ================= */
+        .quiz-img-display {
+            width: 180px; height: 180px; object-fit: contain; margin: 0 auto 15px auto;
+            border-radius: 15px; border: 3px solid #4a2e15; padding: 10px;
+            display: none; background: #f5f5f5; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
         .quiz-btn {
             display: block; width: 100%; background: #4caf50; border: 4px solid #1b5e20;
             color: white; font-size: 20px; font-weight: bold; padding: 10px; border-radius: 15px;
             margin-bottom: 10px; cursor: pointer; box-shadow: 0 5px 0 #1b5e20; transition: 0.1s;
         }
         .quiz-btn:active { transform: translateY(5px); box-shadow: 0 0 0 #1b5e20; }
+        .quiz-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* ================= Hint Button ================= */
+        .hint-btn {
+            background: #2196f3; border: 3px solid #0d47a1; color: white;
+            padding: 8px 15px; border-radius: 10px; font-weight: bold;
+            cursor: pointer; margin-bottom: 10px; width: 100%;
+            box-shadow: 0 3px 0 #0d47a1; transition: 0.1s;
+        }
+        .hint-btn:active { transform: translateY(3px); box-shadow: 0 0 0 #0d47a1; }
+        .hint-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .hint-text {
+            background: #fff9c4; border-left: 4px solid #fbc02d;
+            padding: 10px; margin-bottom: 10px; border-radius: 5px;
+            color: #f57f17; font-weight: bold; display: none; font-size: 14px;
+        }
+
+        /* ================= Achievement ================= */
+        .achievement-popup {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            border: 4px solid #ff6f00; border-radius: 15px; padding: 15px 25px;
+            color: #333; font-weight: bold; font-size: 18px;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.4);
+            z-index: 5000; display: none; animation: slideUp 0.5s ease-out;
+        }
+        @keyframes slideUp {
+            from { transform: translateX(-50%) translateY(100px); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
     </style>
 </head>
 <body>
@@ -196,6 +298,7 @@
     <audio id="sfx-correct" src="https://actions.google.com/sounds/v1/cartoon/cartoon_cowbell.ogg" preload="auto"></audio>
     <audio id="sfx-wrong" src="https://actions.google.com/sounds/v1/cartoon/slip_and_fall.ogg" preload="auto"></audio>
     <audio id="sfx-drop" src="https://actions.google.com/sounds/v1/cartoon/pop.ogg" preload="auto"></audio>
+    <audio id="sfx-achievement" src="https://actions.google.com/sounds/v1/cartoon/cartoon_boing.ogg" preload="auto"></audio>
     
     <audio id="bgm-m1" src="https://mp3tourl.com/audio/1779823159138-3ce05243-a30b-4196-855b-f6a73d8ad7ab.mp3" loop preload="auto"></audio>
     <audio id="bgm-m2" src="https://mp3tourl.com/audio/1779823741006-10020f71-6fa5-4555-8789-80bdec86c0ec.mp3" loop preload="auto"></audio>
@@ -213,9 +316,9 @@
             <h1 class="game-title">ตะลุยป่าไตรยางศ์</h1>
             <input type="text" id="input-name" placeholder="ชื่อนักสำรวจ..." autocomplete="off">
             <button class="wood-btn" onclick="goToCharSelect()">▶ เริ่มการผจญภัย</button>
+            
+            <div class="manual-link" onclick="showManual()">📖 คู่มือการเล่น</div>
         </div>
-        
-        <div class="manual-link" onclick="showManual()">📖 คู่มือการเล่น</div>
     </div>
 
     <div id="scene-char" class="scene">
@@ -260,45 +363,103 @@
             <div style="color: #00e5ff;">💎 <span id="score">0</span>/20</div>
             <div style="color: #ffeb3b;">⏳ <span id="timer">180</span></div>
         </div>
+        <div class="combo-display" id="combo-display">🔥 Combo: <span id="combo-count">0</span></div>
+        <div class="progress-bar" id="progress-bar"><div class="progress-fill" id="progress-fill">0%</div></div>
         <div id="game-area" style="width: 100%; height: 100%; position: relative;"></div>
         
         <div id="basket"></div>
         
         <div id="quiz-container">
-            <img id="quiz-img" class="quiz-img-display" src="">
+            <div class="quiz-header">
+                <span>ข้อที่ <span id="quiz-current">1</span>/30</span>
+                <span id="difficulty-display" class="difficulty-badge difficulty-easy">ง่าย</span>
+            </div>
+            
+            <div id="boss-sprite"></div>
+
+            <img id="quiz-img" class="quiz-img-display" src="" alt="รูปภาพคำถาม">
+            <div id="hint-text" class="hint-text">💡 คำแนะนำ: <span id="hint-content"></span></div>
+            <button class="hint-btn" id="hint-btn" onclick="showHint()">💡 ขอคำแนะนำ</button>
+            
             <div class="quiz-question">คำว่า "<span id="quiz-word">ไก่</span>" <br>หมู่อักษรใด?</div>
-            <button class="quiz-btn" onclick="checkQuiz('กลาง')">อักษรกลาง</button>
-            <button class="quiz-btn" style="background: #f44336; border-color: #b71c1c;" onclick="checkQuiz('สูง')">อักษรสูง</button>
-            <button class="quiz-btn" style="background: #2196f3; border-color: #0d47a1;" onclick="checkQuiz('ต่ำเดี่ยว')">อักษรต่ำเดี่ยว</button>
-            <button class="quiz-btn" style="background: #9c27b0; border-color: #6a1b9a;" onclick="checkQuiz('ต่ำคู่')">อักษรต่ำคู่</button>
+            
+            <button class="quiz-btn" onclick="checkQuiz('กลาง', event)">อักษรกลาง</button>
+            <button class="quiz-btn" style="background: #f44336; border-color: #b71c1c;" onclick="checkQuiz('สูง', event)">อักษรสูง</button>
+            <button class="quiz-btn" style="background: #2196f3; border-color: #0d47a1;" onclick="checkQuiz('ต่ำเดี่ยว', event)">อักษรต่ำเดี่ยว</button>
+            <button class="quiz-btn" style="background: #9c27b0; border-color: #6a1b9a;" onclick="checkQuiz('ต่ำคู่', event)">อักษรต่ำคู่</button>
+        </div>
+
+        <div class="achievement-popup" id="achievement-popup">
+            <span id="achievement-text">🌟 ยอดเยี่ยม!</span>
         </div>
     </div>
 
     <script>
-        // ลิงก์ Google Sheets ของคุณครู
         const sheetUrl = "https://script.google.com/macros/s/AKfycbxQHu86mWczbFPaJ_JGHih5nIHxMye7S01qevDns2KSYDs5_lHWVOIFqJ8TUHc15TfY/exec";
+
+        function createLeaves() {
+            const container = document.getElementById('scene-map');
+            for(let i=0; i<8; i++) {
+                let leaf = document.createElement('div');
+                leaf.className = 'falling-leaf';
+                leaf.style.left = Math.random() * 100 + 'vw';
+                leaf.style.animationDuration = (6 + Math.random() * 6) + 's';
+                leaf.style.animationDelay = (Math.random() * 5) + 's';
+                container.appendChild(leaf);
+            }
+        }
+        createLeaves();
+
+        function showFloatingText(txt, x, y, color) {
+            let el = document.createElement('div');
+            el.innerText = txt;
+            el.style.position = 'fixed';
+            el.style.left = x + 'px';
+            el.style.top = y + 'px';
+            el.style.color = color;
+            el.style.fontSize = '40px';
+            el.style.fontWeight = '900';
+            el.style.textShadow = '2px 2px 0 #000, -1px -1px 0 #fff';
+            el.style.pointerEvents = 'none';
+            el.style.zIndex = '9999';
+            el.style.transition = 'all 0.8s ease-out';
+            document.body.appendChild(el);
+            
+            void el.offsetWidth;
+            
+            el.style.top = (y - 80) + 'px';
+            el.style.opacity = '0';
+            
+            setTimeout(() => el.remove(), 800);
+        }
 
         function showManual() {
             Swal.fire({
                 title: '📖 คู่มือการเล่น',
-                html: `<div style="text-align:left; font-size:16px; line-height:1.5;">
-                    <b>ภารกิจ 1 (อักษรกลาง):</b> ของหล่น 20 ข้อ<br>
-                    <b>ภารกิจ 2 (อักษรสูง):</b> ใส่ตะกร้า 20 ข้อ<br>
-                    <b>ภารกิจ 3 (อักษรต่ำ):</b> แบ่งเป็น ต่ำเดี่ยว และ ต่ำคู่ (ด่านละ 20 ข้อ)<br>
-                    <b>ภารกิจ 4 (บอสไฟต์):</b> ตอบคำถาม 30 ข้อ<br><br>
-                    <b>💎 เกณฑ์เพชร (ต้อง 10 คะแนนขึ้นไป):</b><br>
-                    16-20 ข้อ = 3 ดาว (5 เพชร)<br>
-                    11-15 ข้อ = 2 ดาว (4 เพชร)<br>
-                    10 ข้อ = 1 ดาว (3 เพชร)
+                html: `<div style="text-align:left; font-size:16px; line-height:1.8;">
+                    <b style="color:#d32f2f;">📌 ระบบคะแนน (ตามเกณฑ์ Best Practice):</b><br><br>
+                    <b>ภารกิจที่ 1 (อักษรกลาง):</b> หาข้อมูล 20 ข้อ<br>
+                    <b>ภารกิจที่ 2 (อักษรสูง):</b> ใส่ตะกร้า 20 ข้อ<br>
+                    <b>ภารกิจที่ 3 (อักษรต่ำ):</b> แบ่ง ต่ำเดี่ยว และ ต่ำคู่ (ด่านละ 20 ข้อ)<br>
+                    <b>ภารกิจที่ 4 (บอสไฟต์):</b> ตอบคำถาม 30 ข้อ (5 นาที)<br><br>
+                    <b style="color:#ff6f00;">💎 เกณฑ์เพชร (ต้อง 10 คะแนนขึ้นไป):</b><br>
+                    ✓ 16-20 ข้อ = ⭐⭐⭐ (5 เพชร)<br>
+                    ✓ 11-15 ข้อ = ⭐⭐ (4 เพชร)<br>
+                    ✓ 10 ข้อ = ⭐ (3 เพชร)<br><br>
+                    <b style="color:#4caf50;">🎯 ฟีเจอร์พิเศษ:</b><br>
+                    ✓ 💡 ขอคำแนะนำ (ใช้ได้ 1 ครั้งต่อข้อ)<br>
+                    ✓ 🔥 Combo - ตอบถูกติดต่อกันได้รับโบนัส<br>
+                    ✓ 📊 Progress Bar - ติดตามความคืบหน้า<br>
+                    ✓ 🎨 รูปภาพประกอบ - ทุกข้อคำถาม
                     </div>`,
-                confirmButtonColor: '#8b5a2b'
+                confirmButtonColor: '#8b5a2b',
+                width: '600px'
             });
         }
 
-        // ================= ระบบเสียง & ปิดเสียง =================
         let isMuted = false;
         function initAudio() {
-            ['sfx-click', 'sfx-chest', 'sfx-correct', 'sfx-wrong', 'sfx-drop', 'bgm-m1', 'bgm-m2', 'bgm-m3'].forEach(id => {
+            ['sfx-click', 'sfx-chest', 'sfx-correct', 'sfx-wrong', 'sfx-drop', 'sfx-achievement', 'bgm-m1', 'bgm-m2', 'bgm-m3'].forEach(id => {
                 let el = document.getElementById(id);
                 if(el) { el.volume = 0; el.play().catch(()=>{}); el.pause(); el.currentTime = 0; el.volume = 1; }
             });
@@ -314,11 +475,12 @@
             if(isMuted) stopAllBgm();
         }
 
-        // ================= ข้อมูลเกม & แผนที่อัจฉริยะ =================
         let playerName = "", currentScore = 0, totalDiamonds = 0, gameTimer, spawnInterval, itemsSpawned = 0;
         let storyProgress = 0; 
         let scoresData = { m1: 0, m2: 0, m31: 0, m32: 0, m4: 0 };
         let layoutCoords = []; 
+        let comboCount = 0, maxCombo = 0;
+        let hintUsed = false;
         
         const midCons = ['ก','จ','ด','ต','บ','ป','อ','ฎ','ฏ'];
         const highCons = ['ข','ฃ','ฉ','ฐ','ถ','ผ','ฝ','ศ','ษ','ส','ห'];
@@ -326,17 +488,50 @@
         const lowDouble = ['ค','ฅ','ฆ','ช','ซ','ฌ','ฑ','ฒ','ท','ธ','พ','ฟ','ภ','ฮ'];
         const allCons = [...midCons, ...highCons, ...lowSingle, ...lowDouble];
 
+        // ============= ข้อมูลคำถามพร้อมรูปภาพ & ความยาก & คำแนะนำ =============
         const quizData = [
-            {w:"ไก่", a:"กลาง", img:""}, {w:"จาน", a:"กลาง", img:""}, {w:"เด็ก", a:"กลาง", img:""}, {w:"เต่า", a:"กลาง", img:""}, {w:"ใบไม้", a:"กลาง", img:""}, {w:"ปลา", a:"กลาง", img:""}, {w:"อ่าง", a:"กลาง", img:""},
-            {w:"ไข่", a:"สูง", img:""}, {w:"ฉิ่ง", a:"สูง", img:""}, {w:"ถุง", a:"สูง", img:""}, {w:"ผึ้ง", a:"สูง", img:""}, {w:"ฝา", a:"สูง", img:""}, {w:"ศาลา", a:"สูง", img:""}, {w:"เสือ", a:"สูง", img:""}, {w:"หมา", a:"สูง", img:""},
-            {w:"งู", a:"ต่ำเดี่ยว", img:""}, {w:"เณร", a:"ต่ำเดี่ยว", img:""}, {w:"หนู", a:"ต่ำเดี่ยว", img:""}, {w:"ม้า", a:"ต่ำเดี่ยว", img:""}, {w:"ยักษ์", a:"ต่ำเดี่ยว", img:""}, {w:"เรือ", a:"ต่ำเดี่ยว", img:""}, {w:"ลิง", a:"ต่ำเดี่ยว", img:""}, {w:"แหวน", a:"ต่ำเดี่ยว", img:""},
-            {w:"ควาย", a:"ต่ำคู่", img:""}, {w:"ช้าง", a:"ต่ำคู่", img:""}, {w:"โซ่", a:"ต่ำคู่", img:""}, {w:"ทหาร", a:"ต่ำคู่", img:""}, {w:"ธง", a:"ต่ำคู่", img:""}, {w:"พาน", a:"ต่ำคู่", img:""}, {w:"ฟัน", a:"ต่ำคู่", img:""}
+            // อักษรกลาง (7 ข้อ)
+            {w:"ไก่", a:"กลาง", img:"https://cdn-icons-png.flaticon.com/512/2748/2748521.png", difficulty:"easy", hint:"สัตว์ที่ร้องโครอกครัก"},
+            {w:"จาน", a:"กลาง", img:"https://cdn-icons-png.flaticon.com/512/3050/3050159.png", difficulty:"easy", hint:"จานสำหรับใส่อาหาร"},
+            {w:"เด็ก", a:"กลาง", img:"https://cdn-icons-png.flaticon.com/512/5556/5556468.png", difficulty:"easy", hint:"บุคคลที่ยังเล็ก"},
+            {w:"เต่า", a:"กลาง", img:"https://cdn-icons-png.flaticon.com/512/3069/3069185.png", difficulty:"medium", hint:"สัตว์ที่เดินช้า"},
+            {w:"ใบไม้", a:"กลาง", img:"https://cdn-icons-png.flaticon.com/512/1534/1534989.png", difficulty:"easy", hint:"ส่วนของต้นไม้"},
+            {w:"ปลา", a:"กลาง", img:"https://cdn-icons-png.flaticon.com/512/2389/2389039.png", difficulty:"easy", hint:"สัตว์น้ำ"},
+            {w:"อ่าง", a:"กลาง", img:"https://cdn-icons-png.flaticon.com/512/1620/1620263.png", difficulty:"medium", hint:"ภาชนะใส่น้ำ"},
+            
+            // อักษรสูง (7 ข้อ)
+            {w:"ไข่", a:"สูง", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"easy", hint:"สัตว์ไก่ออกมา"},
+            {w:"ฉิ่ง", a:"สูง", img:"https://cdn-icons-png.flaticon.com/512/3531/3531653.png", difficulty:"hard", hint:"เครื่องดนตรี"},
+            {w:"ถุง", a:"สูง", img:"https://cdn-icons-png.flaticon.com/512/924/924515.png", difficulty:"medium", hint:"บรรจุภัณฑ์"},
+            {w:"ผึ้ง", a:"สูง", img:"https://cdn-icons-png.flaticon.com/512/985/985941.png", difficulty:"easy", hint:"สัตว์ที่ผลิตน้ำผึ้ง"},
+            {w:"ฝา", a:"สูง", img:"https://cdn-icons-png.flaticon.com/512/1995/1995506.png", difficulty:"medium", hint:"ปิดปากภาชนะ"},
+            {w:"ศาลา", a:"สูง", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"hard", hint:"สถานที่พัก"},
+            {w:"เสือ", a:"สูง", img:"https://cdn-icons-png.flaticon.com/512/1046/1046784.png", difficulty:"easy", hint:"สัตว์ลายดำส้ม"},
+            
+            // อักษรต่ำเดี่ยว (8 ข้อ)
+            {w:"งู", a:"ต่ำเดี่ยว", img:"https://cdn-icons-png.flaticon.com/512/1046/1046783.png", difficulty:"easy", hint:"สัตว์คลานไม่มีขา"},
+            {w:"เณร", a:"ต่ำเดี่ยว", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"hard", hint:"พระอยุธยา"},
+            {w:"หนู", a:"ต่ำเดี่ยว", img:"https://cdn-icons-png.flaticon.com/512/1046/1046782.png", difficulty:"easy", hint:"สัตว์เล็กมีหาง"},
+            {w:"ม้า", a:"ต่ำเดี่ยว", img:"https://cdn-icons-png.flaticon.com/512/1046/1046781.png", difficulty:"easy", hint:"สัตว์ที่มีขา 4 ขา"},
+            {w:"ยักษ์", a:"ต่ำเดี่ยว", img:"https://cdn-icons-png.flaticon.com/512/1046/1046780.png", difficulty:"hard", hint:"ตัวร้ายในนิทาน"},
+            {w:"เรือ", a:"ต่ำเดี่ยว", img:"https://cdn-icons-png.flaticon.com/512/985/985946.png", difficulty:"medium", hint:"ยานพาหนะในน้ำ"},
+            {w:"ลิง", a:"ต่ำเดี่ยว", img:"https://cdn-icons-png.flaticon.com/512/1046/1046779.png", difficulty:"easy", hint:"สัตว์ที่ชอบกล้วย"},
+            {w:"แหวน", a:"ต่ำเดี่ยว", img:"https://cdn-icons-png.flaticon.com/512/924/924512.png", difficulty:"medium", hint:"เครื่องประดับวง"},
+            
+            // อักษรต่ำคู่ (8 ข้อ)
+            {w:"ควาย", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/1046/1046781.png", difficulty:"medium", hint:"สัตว์บ้านตัวใหญ่"},
+            {w:"ช้าง", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/1046/1046777.png", difficulty:"easy", hint:"สัตว์ที่มีงา"},
+            {w:"โซ่", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/924/924516.png", difficulty:"medium", hint:"ห่วงโซ่เชื่อม"},
+            {w:"ทหาร", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/747/747376.png", difficulty:"medium", hint:"ผู้ป้องกันประเทศ"},
+            {w:"ธง", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/3304/3304572.png", difficulty:"easy", hint:"สัญลักษณ์ประเทศ"},
+            {w:"พาน", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/924/924517.png", difficulty:"hard", hint:"สำลัก"},
+            {w:"ฟัน", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/924/924518.png", difficulty:"easy", hint:"ในปาก"},
+            {w:"ภูมิใจ", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/1999/1999632.png", difficulty:"hard", hint:"ความรู้สึกภูมิใจ"}
         ];
         let quizIndex = 0;
 
         function switchScene(id) { document.querySelectorAll('.scene').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
 
-        // ================= คำนวณแผนที่ (แนวตั้ง/แนวนอน ตามสั่งเป๊ะ) =================
         function drawMap() {
             let isPortrait = window.innerHeight > window.innerWidth;
             
@@ -489,6 +684,7 @@
         // ================= มินิเกม 1-4 =================
         function startGame() {
             document.getElementById('game-hud').style.display = 'flex';
+            document.getElementById('progress-bar').style.display = 'block';
             let isBasket = (storyProgress === 2 || storyProgress === 4);
             if(isBasket) document.getElementById('basket').style.display = 'block';
 
@@ -503,6 +699,12 @@
             }, 1000);
 
             spawnInterval = setInterval(spawnItem, 1500); 
+        }
+
+        function updateProgressBar() {
+            let progress = (currentScore / 20) * 100;
+            document.getElementById('progress-fill').style.width = progress + '%';
+            document.getElementById('progress-fill').innerText = Math.round(progress) + '%';
         }
 
         function spawnItem() {
@@ -539,7 +741,19 @@
                 e.preventDefault(); clearInterval(fall);
                 
                 if(targetArr.includes(this.innerText)) {
-                    currentScore++; document.getElementById('score').innerText = currentScore + "/20";
+                    currentScore++; 
+                    comboCount++;
+                    if(comboCount > maxCombo) maxCombo = comboCount;
+                    
+                    document.getElementById('score').innerText = currentScore + "/20";
+                    updateProgressBar();
+                    showFloatingText("+1", e.clientX, e.clientY, "#8bc34a");
+                    
+                    if(comboCount >= 5) {
+                        document.getElementById('combo-display').style.display = 'block';
+                        document.getElementById('combo-count').innerText = comboCount;
+                        showAchievement('🔥 Combo x' + comboCount + '!');
+                    }
                     
                     if(isBasket) {
                         playSfx('sfx-drop');
@@ -554,7 +768,10 @@
                         this.style.transform = "scale(0)";
                     }
                 } else {
+                    comboCount = 0;
+                    document.getElementById('combo-display').style.display = 'none';
                     playSfx('sfx-wrong'); 
+                    showFloatingText("❌", e.clientX, e.clientY, "#f44336");
                     this.style.background = "#d32f2f"; this.style.color = "#fff";
                     this.style.transform = "scale(0)";
                 }
@@ -579,6 +796,8 @@
             clearInterval(gameTimer); clearInterval(spawnInterval);
             document.getElementById('game-area').innerHTML = "";
             document.getElementById('game-hud').style.display = 'none';
+            document.getElementById('progress-bar').style.display = 'none';
+            document.getElementById('combo-display').style.display = 'none';
             document.getElementById('basket').style.display = 'none';
             stopAllBgm();
             
@@ -591,10 +810,10 @@
                 if(storyProgress===3) scoresData.m31 = currentScore;
                 if(storyProgress===4) scoresData.m32 = currentScore;
 
-                sendDataToSheet(); // ส่งคะแนน
+                sendDataToSheet();
 
                 let nextMsg = storyProgress === 3 ? "เตรียมตัวลุย อักษรต่ำคู่ ต่อเลย!" : "ไปด่านต่อไปกันเลย!";
-                Swal.fire({ title: `ผ่านด่าน!`, text: `ได้ ${currentScore}/20 คะแนน\n\n${nextMsg}`, icon: "success", confirmButtonColor: '#8b5a2b', allowOutsideClick: false })
+                Swal.fire({ title: `ผ่านด่าน!`, text: `ได้ ${currentScore}/20 คะแนน ${reward.stars}\n\n${nextMsg}`, icon: "success", confirmButtonColor: '#8b5a2b', allowOutsideClick: false })
                 .then(() => { 
                     if(storyProgress===0) { storyProgress = 1; } else { storyProgress++; } 
                     switchScene('scene-map'); resumeStory(); 
@@ -605,12 +824,13 @@
             }
         }
 
-        // ================= บอสไฟต์ 30 ข้อ 5 นาที =================
+        // ================= บอสไฟต์ 30 ข้อ =================
         function startBossGame() {
             document.getElementById('game-hud').style.display = 'flex';
+            document.getElementById('combo-display').style.display = 'block';
             document.getElementById('quiz-container').style.display = 'block';
             let timeLeft = 300; 
-            currentScore = 0; quizIndex = 0;
+            currentScore = 0; quizIndex = 0; comboCount = 0;
             document.getElementById('score').innerText = currentScore + "/30";
             document.getElementById('timer').innerText = timeLeft;
 
@@ -625,23 +845,63 @@
 
         function showQuiz() {
             if(quizIndex >= 30) { endBoss(); return; }
+            
+            document.getElementById('quiz-current').innerText = quizIndex + 1;
             document.getElementById('quiz-word').innerText = quizData[quizIndex].w;
+            document.getElementById('hint-text').style.display = 'none';
+            document.getElementById('hint-btn').disabled = false;
+            hintUsed = false;
+            
+            let diffDisplay = document.getElementById('difficulty-display');
+            diffDisplay.className = 'difficulty-badge';
+            if(quizData[quizIndex].difficulty === 'easy') {
+                diffDisplay.classList.add('difficulty-easy');
+                diffDisplay.innerText = 'ง่าย';
+            } else if(quizData[quizIndex].difficulty === 'medium') {
+                diffDisplay.classList.add('difficulty-medium');
+                diffDisplay.innerText = 'ปานกลาง';
+            } else {
+                diffDisplay.classList.add('difficulty-hard');
+                diffDisplay.innerText = 'ยาก';
+            }
             
             let imgEl = document.getElementById('quiz-img');
             if(quizData[quizIndex].img) {
                 imgEl.src = quizData[quizIndex].img;
-                imgEl.style.display = 'inline-block';
+                imgEl.style.display = 'block';
             } else {
                 imgEl.style.display = 'none';
             }
         }
 
-        function checkQuiz(ans) {
+        function showHint() {
+            if(hintUsed) return;
+            hintUsed = true;
+            document.getElementById('hint-text').style.display = 'block';
+            document.getElementById('hint-content').innerText = quizData[quizIndex].hint;
+            document.getElementById('hint-btn').disabled = true;
+        }
+
+        function checkQuiz(ans, event) {
+            let boss = document.getElementById('boss-sprite');
+            
             if(quizData[quizIndex].a === ans) {
-                playSfx('sfx-correct'); currentScore++; 
+                playSfx('sfx-correct'); currentScore++; comboCount++;
+                if(comboCount > maxCombo) maxCombo = comboCount;
+                
                 document.getElementById('score').innerText = currentScore + "/30";
+                document.getElementById('combo-count').innerText = comboCount;
+                
+                boss.classList.add('boss-hit');
+                showFloatingText("+1", event.clientX, event.clientY, "#8bc34a");
+                
+                if(comboCount >= 5) showAchievement('🔥 Combo x' + comboCount + '!');
+                
+                setTimeout(() => boss.classList.remove('boss-hit'), 300);
             } else { 
+                comboCount = 0;
                 playSfx('sfx-wrong'); 
+                showFloatingText("❌", event.clientX, event.clientY, "#f44336");
                 let container = document.getElementById('quiz-container');
                 container.style.transform = "translateX(-10px)";
                 setTimeout(() => container.style.transform = "translateX(10px)", 50);
@@ -650,10 +910,19 @@
             quizIndex++; showQuiz();
         }
 
+        function showAchievement(text) {
+            playSfx('sfx-achievement');
+            let popup = document.getElementById('achievement-popup');
+            popup.innerText = text;
+            popup.style.display = 'block';
+            setTimeout(() => { popup.style.display = 'none'; }, 2000);
+        }
+
         function endBoss() {
             clearInterval(gameTimer);
             document.getElementById('quiz-container').style.display = 'none';
             document.getElementById('game-hud').style.display = 'none';
+            document.getElementById('combo-display').style.display = 'none';
             stopAllBgm();
 
             if(currentScore >= 10) {
@@ -665,7 +934,7 @@
                 totalDiamonds += bD;
                 scoresData.m4 = currentScore;
                 
-                sendDataToSheet(); // ส่งคะแนนครั้งสุดท้าย
+                sendDataToSheet();
 
                 let finalStars = "";
                 let finalMsg = "";
@@ -675,7 +944,7 @@
 
                 Swal.fire({
                     title: "ยินดีด้วย คุณพิชิตป่าสำเร็จ!", 
-                    html: `<span style='font-size:30px;'>${finalStars}</span><br><b>${finalMsg}</b><br><br>คะแนนรวมทั้งหมด ${totalDiamonds} / 35 เพชร 💎`,
+                    html: `<span style='font-size:30px;'>${finalStars}</span><br><b>${finalMsg}</b><br><br>คะแนนรวมทั้งหมด ${totalDiamonds} / 35 เพชร 💎<br><b style="color:#ff6f00;">🔥 Combo สูงสุด: x${maxCombo}</b>`,
                     imageUrl: 'https://cdn-icons-png.flaticon.com/512/4230/4230571.png', imageWidth: 150, 
                     confirmButtonText: 'รับใบประกาศกับคุณครู!', confirmButtonColor: '#8bc34a', background: '#fff8e1', allowOutsideClick: false
                 }).then(() => { location.reload(); });
@@ -685,7 +954,6 @@
             }
         }
 
-        // ================= ส่งข้อมูลเข้า Google Sheets =================
         function sendDataToSheet() {
             const payload = {
                 studentName: playerName,
