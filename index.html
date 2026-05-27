@@ -10,8 +10,8 @@
     <style>
         :root {
             --bg-start: url('https://img.magnific.com/free-vector/forest-scene-with-various-forest-trees_1308-57640.jpg?semt=ais_hybrid&w=740&q=80');
-            --char-boy: url('https://i.postimg.cc/mrSpgYMf/2.png');
-            --char-girl: url('https://i.postimg.cc/TYysJW8r/1.png');
+            --char-boy: url('https://i.postimg.cc/Wb5dHjNY/d-sin-th-y-ngmi-di-t-ngch-x-(22).png');
+            --char-girl: url('https://i.postimg.cc/YqRFBY3z/d-sin-th-y-ngmi-di-t-ngch-x-(21).png');
             --icon-school: url('https://i.postimg.cc/q7gCZn0d/1.png'); 
             --icon-forest: url('https://i.postimg.cc/zGGLVWyN/2.png'); 
             --icon-cave: url('https://i.postimg.cc/g2txRJhM/3.png'); 
@@ -89,14 +89,14 @@
         .wood-btn:active { transform: translateY(6px); box-shadow: 0 0 0 #4a2e15; }
 
         .manual-link {
-            position: fixed; bottom: 15px; left: 15px;
-            font-size: 30px; cursor: pointer; z-index: 100;
-            transition: 0.2s; background: rgba(255,255,255,0.9); 
-            border-radius: 50%; width: 55px; height: 55px;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%);
+            font-size: 14px; color: #ffca28; font-weight: bold;
+            text-decoration: none; cursor: pointer; text-shadow: 1px 1px 2px #4a2e15; z-index: 50;
+            transition: 0.2s; white-space: nowrap; padding: 6px 12px;
+            background: rgba(139, 90, 43, 0.85); border-radius: 20px;
         }
-        .manual-link:hover { transform: scale(1.1); }
+        .manual-link:hover { color: #fff; transform: translateX(-50%) scale(1.05); }
+        .manual-link.hidden { display: none; }
 
         /* ปุ่มด้านบน (Home & Music) */
         .top-btn {
@@ -180,12 +180,14 @@
         .game-item {
             position: absolute; width: 75px; height: 75px; background: #fff; border: 4px solid #4a2e15; border-radius: 50%;
             display: flex; justify-content: center; align-items: center; font-size: 35px; font-weight: 900; color: #111; cursor: pointer;
-            box-shadow: 0 6px 0 #4a2e15; pointer-events: auto;
+            box-shadow: 0 6px 0 #4a2e15; pointer-events: auto; user-select: none;
         }
 
         .hud {
-            position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.8); border: 3px solid #ffca28;
-            padding: 5px 15px; border-radius: 15px; display: none; gap: 15px; font-size: 20px; font-weight: 900; z-index: 500;
+            position: absolute; top: 15px; left: 15px; background: linear-gradient(135deg, rgba(0,0,0,0.85), rgba(0,0,0,0.75)); 
+            border: 3px solid #ffca28; border-radius: 15px; padding: 12px 18px; display: none; 
+            gap: 25px; font-size: 20px; font-weight: 900; z-index: 500;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
         }
 
         /* ================= Progress Bar ================= */
@@ -203,7 +205,7 @@
 
         #basket {
             position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
-            width: 150px; height: 100px; background: url('https://cdn-icons-png.flaticon.com/512/3752/3752674.png') center/contain no-repeat;
+            width: 180px; height: 120px; background: url('https://cdn-icons-png.flaticon.com/512/924/924514.png') center/contain no-repeat;
             display: none; z-index: 100; pointer-events: none;
         }
 
@@ -292,6 +294,66 @@
             to { transform: translateX(-50%) translateY(0); opacity: 1; }
         }
 
+        /* ================= Settings Panel ================= */
+        #settings-panel {
+            position: fixed; top: 70px; right: 15px; background: linear-gradient(135deg, #f5f5f5, #ffffff);
+            border: 3px solid #4caf50; border-radius: 15px; padding: 20px;
+            color: #333; z-index: 2001; min-width: 320px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+            max-height: 65vh; overflow-y: auto;
+        }
+        .settings-title {
+            font-size: 20px; font-weight: bold; color: #1976d2;
+            border-bottom: 2px solid #1976d2; padding-bottom: 10px; margin-bottom: 15px;
+        }
+        .settings-item {
+            margin-bottom: 15px; padding-bottom: 12px; border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        .settings-label {
+            font-weight: bold; color: #333; display: block; margin-bottom: 8px;
+        }
+        .settings-value {
+            color: #4caf50; font-size: 14px; font-weight: bold;
+        }
+        .settings-close {
+            position: absolute; top: 10px; right: 15px; cursor: pointer;
+            font-size: 24px; color: #ff6f00; transition: 0.2s;
+        }
+        .settings-close:hover { transform: scale(1.2); }
+
+        /* ================= Badge/Medal System ================= */
+        #badge-container {
+            position: fixed; top: 80px; left: 15px; z-index: 1900;
+            display: flex; gap: 8px; flex-wrap: wrap; max-width: 280px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));
+            padding: 10px; border-radius: 10px; border: 2px solid #ffca28;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+        .badge {
+            width: 48px; height: 48px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; cursor: pointer; transition: 0.2s;
+            border: 3px solid gold; box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+            position: relative;
+        }
+        .badge:hover { transform: scale(1.15); }
+        .badge.locked { opacity: 0.3; border-color: gray; filter: grayscale(1); }
+        .badge-tooltip {
+            position: absolute; bottom: -35px; background: rgba(0,0,0,0.95);
+            color: white; padding: 6px 10px; border-radius: 5px; font-size: 11px;
+            white-space: nowrap; opacity: 0; transition: 0.2s; pointer-events: none;
+            left: 50%; transform: translateX(-50%); z-index: 2002;
+            border: 1px solid #ffca28;
+        }
+        .badge:hover .badge-tooltip { opacity: 1; bottom: -38px; }
+
+        /* ================= Achievement Rarity ================= */
+        .rarity-common { background: linear-gradient(135deg, #90ee90, #98fb98); color: #000; }
+        .rarity-uncommon { background: linear-gradient(135deg, #4169e1, #6495ed); }
+        .rarity-rare { background: linear-gradient(135deg, #9370db, #dda0dd); }
+        .rarity-epic { background: linear-gradient(135deg, #ff8c00, #ffa500); }
+        .rarity-legend { background: linear-gradient(135deg, #ffd700, #ffed4e); color: #000; }
+
         /* ================= Power-ups ================= */
         .powerup {
             position: absolute; width: 50px; height: 50px;
@@ -369,9 +431,36 @@
 
     <div class="top-btn" id="home-btn" onclick="location.reload()">🏠</div>
     <div class="top-btn" id="music-btn" onclick="toggleMusic()">🎵</div>
-    <div class="manual-link" onclick="showManual()">📖</div>
+    <div class="top-btn" id="settings-btn" onclick="toggleSettings()" style="right: 70px; border-color: #4caf50;">⚙️</div>
 
     <div id="powerup-container" style="position: fixed; top: 80px; right: 15px; display: none; z-index: 1900; background: rgba(0,0,0,0.7); padding: 10px; border-radius: 10px; color: white; font-weight: bold; font-size: 14px; text-align: center; border: 2px solid #ffca28;"></div>
+    
+    <div id="settings-panel" style="display: none;">
+        <div class="settings-close" onclick="toggleSettings()">✕</div>
+        <div class="settings-title">⚙️ ตั้งค่า & สถิติ</div>
+        <div class="settings-item">
+            <span class="settings-label">👤 ผู้เล่น:</span>
+            <span class="settings-value" id="settings-player">-</span>
+        </div>
+        <div class="settings-item">
+            <span class="settings-label">📊 เพชรรวม:</span>
+            <span class="settings-value" id="settings-diamonds">0/35</span>
+        </div>
+        <div class="settings-item">
+            <span class="settings-label">🔥 Combo Max:</span>
+            <span class="settings-value" id="settings-combo">0</span>
+        </div>
+        <div class="settings-item">
+            <span class="settings-label">🎮 ด่านผ่าน:</span>
+            <span class="settings-value" id="settings-passed">0/4</span>
+        </div>
+        <div class="settings-item">
+            <span class="settings-label">⏱️ เวลาเล่น:</span>
+            <span class="settings-value" id="settings-time">0 นาที</span>
+        </div>
+    </div>
+
+    <div id="badge-container" style="display: none;"></div>
 
     <div id="scene-title" class="scene active">
         <div class="firefly" style="top: 20%; left: 30%; animation-duration: 3s;"></div>
@@ -382,6 +471,7 @@
             <h1 class="game-title">ตะลุยป่าไตรยางศ์</h1>
             <input type="text" id="input-name" placeholder="ชื่อนักสำรวจ..." autocomplete="off">
             <button class="wood-btn" onclick="goToCharSelect()">▶ เริ่มการผจญภัย</button>
+            <div class="manual-link" onclick="showManual()">📖 คู่มือการเล่น</div>
         </div>
     </div>
 
@@ -461,6 +551,58 @@
     <script>
         const sheetUrl = "https://script.google.com/macros/s/AKfycbxQHu86mWczbFPaJ_JGHih5nIHxMye7S01qevDns2KSYDs5_lHWVOIFqJ8TUHc15TfY/exec";
 
+        // ================= Settings & Badge System =================
+        function toggleSettings() {
+            let panel = document.getElementById('settings-panel');
+            if(panel.style.display === 'none' || !panel.style.display) {
+                updateSettingsDisplay();
+                panel.style.display = 'block';
+            } else {
+                panel.style.display = 'none';
+            }
+        }
+
+        function updateSettingsDisplay() {
+            document.getElementById('settings-player').innerText = playerName || '-';
+            document.getElementById('settings-diamonds').innerText = totalDiamonds + '/35';
+            document.getElementById('settings-combo').innerText = maxCombo;
+            document.getElementById('settings-passed').innerText = gameStats.levelsPassed + '/4';
+            document.getElementById('settings-time').innerText = Math.round(gameStats.totalTime / 60) + ' นาที';
+        }
+
+        function unlockBadge(badgeKey) {
+            if(badges[badgeKey] && !badges[badgeKey].unlocked) {
+                badges[badgeKey].unlocked = true;
+                showAchievement('🏅 ได้ Badge: ' + badges[badgeKey].name);
+                updateBadgesDisplay();
+            }
+        }
+
+        function updateBadgesDisplay() {
+            let container = document.getElementById('badge-container');
+            if(Object.values(badges).some(b => b.unlocked)) {
+                container.style.display = 'flex';
+            }
+            container.innerHTML = '';
+            
+            for(let key in badges) {
+                let badge = badges[key];
+                let badgeEl = document.createElement('div');
+                badgeEl.className = 'badge ' + (badge.unlocked ? 'rarity-' + badge.rarity : 'locked');
+                badgeEl.innerText = badge.icon;
+                badgeEl.innerHTML += '<div class="badge-tooltip">' + (badge.unlocked ? badge.name : 'ล็อก') + '</div>';
+                container.appendChild(badgeEl);
+            }
+        }
+
+        function checkBadges() {
+            if(totalDiamonds >= 35) unlockBadge('perfect_score');
+            if(maxCombo >= 10) unlockBadge('combo_master');
+            if(gameStats.levelsPassed >= 4) unlockBadge('all_stages');
+            if(usedPowerups >= 3) unlockBadge('powerup_collector');
+            if(gameStats.totalTime >= 300) unlockBadge('speed_demon');
+        }
+
         function createLeaves() {
             const container = document.getElementById('scene-map');
             for(let i=0; i<8; i++) {
@@ -502,7 +644,7 @@
 
         // ================= Power-ups System =================
         function spawnPowerup() {
-            if(Math.random() > 0.15) return; // 15% chance
+            if(Math.random() > 0.08) return; // ลดจาก 15% เหลือ 8%
             
             let types = [
                 { icon: '2️⃣', type: '2x', name: '2x คะแนน', duration: 8 },
@@ -573,16 +715,16 @@
 
         // ================= Time Bonus System =================
         function updateTimeBonus(timeLeft) {
-            if(timeLeft > 150) timeBonus = 5;
-            else if(timeLeft > 120) timeBonus = 4;
-            else if(timeLeft > 90) timeBonus = 3;
-            else if(timeLeft > 60) timeBonus = 2;
-            else if(timeLeft > 30) timeBonus = 1;
+            if(timeLeft > 250) timeBonus = 5;
+            else if(timeLeft > 200) timeBonus = 4;
+            else if(timeLeft > 150) timeBonus = 3;
+            else if(timeLeft > 100) timeBonus = 2;
+            else if(timeLeft > 50) timeBonus = 1;
             else timeBonus = 0;
             
             let bonusBar = document.getElementById('time-bonus-bar');
             if(bonusBar) {
-                let fillPercent = Math.max(0, (timeLeft / 180) * 100);
+                let fillPercent = Math.max(0, (timeLeft / 300) * 100);
                 document.getElementById('time-bonus-fill').style.width = fillPercent + '%';
             }
         }
@@ -619,26 +761,72 @@
         }
 
         function showManual() {
+            let isMobile = window.innerWidth < 768;
+            let dialogHTML = '';
+            
+            if(isMobile) {
+                // แนวตั้ง scrollable บนโทรศัพท์
+                dialogHTML = `<div style="text-align:left; font-size:14px; line-height:1.8; max-height:65vh; overflow-y:auto;">
+                    <b style="color:#d32f2f;">🎮 วิธีเล่น (ก-ฮ แบบใหม่):</b><br><br>
+                    <b>📌 ภารกิจที่ 1-3:</b> แต่ละภารกิจ 44 ข้อ<br>
+                    &nbsp;&nbsp;• ก-ฮ 11 หมู่อักษร × 4 ข้อ = 44 ข้อ<br>
+                    &nbsp;&nbsp;• เวลา: 5 นาทีต่อภารกิจ<br>
+                    &nbsp;&nbsp;• ต้อง 22 คะแนนขึ้นไป เพื่อผ่าน<br><br>
+                    <b>📌 ภารกิจที่ 3:</b> 2 ด่าน (ต่ำเดี่ยว + ต่ำคู่)<br>
+                    &nbsp;&nbsp;• รวม 10 นาที<br><br>
+                    <b>📌 ภารกิจที่ 4 (บอสไฟต์):</b> 44 ข้อ<br>
+                    &nbsp;&nbsp;• ก-ฮ 11 หมู่อักษร × 4 ข้อ<br>
+                    &nbsp;&nbsp;• เวลา: 20 นาที<br>
+                    &nbsp;&nbsp;• ต้อง 22 คะแนนขึ้นไป เพื่อชนะบอส<br><br>
+                    <b style="color:#ff6f00;">💎 เกณฑ์เพชร:</b><br>
+                    ✓ 35-44 ข้อ = ⭐⭐⭐ (5 เพชร)<br>
+                    ✓ 28-34 ข้อ = ⭐⭐ (4 เพชร)<br>
+                    ✓ 22-27 ข้อ = ⭐ (3 เพชร)<br><br>
+                    <b style="color:#4caf50;">🎯 ลูกเล่น:</b><br>
+                    ✓ 💡 ขอคำแนะนำ<br>
+                    ✓ 🔥 Combo - ตอบถูกติดต่อกัน<br>
+                    ✓ ⚙️ Power-ups ระหว่างเล่น<br>
+                    ✓ 🎊 Confetti - เฉลิมฉลอง
+                    </div>`;
+            } else {
+                // แนวนอน บน desktop/tablet
+                dialogHTML = `<div style="text-align:center; font-size:15px; line-height:1.8; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div style="text-align:left;">
+                        <b style="color:#d32f2f; font-size:16px;">🎮 วิธีเล่น</b><br><br>
+                        <b>📌 ภารกิจที่ 1-3:</b><br>
+                        แต่ละภารกิจ 44 ข้อ<br>
+                        เวลา: 5 นาทีต่อภารกิจ<br>
+                        ต้อง 22 คะแนนขึ้นไป<br><br>
+                        <b>📌 ภารกิจที่ 3:</b><br>
+                        2 ด่าน (รวม 10 นาที)<br>
+                        ต่ำเดี่ยว + ต่ำคู่<br><br>
+                        <b>📌 ภารกิจที่ 4:</b><br>
+                        44 ข้อ บอสไฟต์<br>
+                        เวลา: 20 นาที<br>
+                        ต้อง 22 คะแนนขึ้นไป
+                    </div>
+                    <div style="text-align:left;">
+                        <b style="color:#ff6f00; font-size:16px;">💎 เกณฑ์เพชร</b><br><br>
+                        35-44 ข้อ = ⭐⭐⭐<br>
+                        5 เพชร<br><br>
+                        28-34 ข้อ = ⭐⭐<br>
+                        4 เพชร<br><br>
+                        22-27 ข้อ = ⭐<br>
+                        3 เพชร<br><br>
+                        <b style="color:#4caf50;">🎯 ลูกเล่น:</b><br>
+                        💡 ขอคำแนะนำ<br>
+                        🔥 Combo<br>
+                        ⚙️ Power-ups<br>
+                        🎊 Confetti
+                    </div>
+                </div>`;
+            }
+
             Swal.fire({
                 title: '📖 คู่มือการเล่น',
-                html: `<div style="text-align:left; font-size:16px; line-height:1.8;">
-                    <b style="color:#d32f2f;">📌 ระบบคะแนน (ตามเกณฑ์ Best Practice):</b><br><br>
-                    <b>ภารกิจที่ 1 (อักษรกลาง):</b> หาข้อมูล 20 ข้อ<br>
-                    <b>ภารกิจที่ 2 (อักษรสูง):</b> ใส่ตะกร้า 20 ข้อ<br>
-                    <b>ภารกิจที่ 3 (อักษรต่ำ):</b> แบ่ง ต่ำเดี่ยว และ ต่ำคู่ (ด่านละ 20 ข้อ)<br>
-                    <b>ภารกิจที่ 4 (บอสไฟต์):</b> ตอบคำถาม 30 ข้อ (5 นาที)<br><br>
-                    <b style="color:#ff6f00;">💎 เกณฑ์เพชร (ต้อง 10 คะแนนขึ้นไป):</b><br>
-                    ✓ 16-20 ข้อ = ⭐⭐⭐ (5 เพชร)<br>
-                    ✓ 11-15 ข้อ = ⭐⭐ (4 เพชร)<br>
-                    ✓ 10 ข้อ = ⭐ (3 เพชร)<br><br>
-                    <b style="color:#4caf50;">🎯 ฟีเจอร์พิเศษ:</b><br>
-                    ✓ 💡 ขอคำแนะนำ (ใช้ได้ 1 ครั้งต่อข้อ)<br>
-                    ✓ 🔥 Combo - ตอบถูกติดต่อกันได้รับโบนัส<br>
-                    ✓ 📊 Progress Bar - ติดตามความคืบหน้า<br>
-                    ✓ 🎨 รูปภาพประกอบ - ทุกข้อคำถาม
-                    </div>`,
+                html: dialogHTML,
                 confirmButtonColor: '#8b5a2b',
-                width: '600px'
+                width: isMobile ? '95%' : '700px'
             });
         }
 
@@ -670,6 +858,27 @@
         let scoreMultiplier = 1;
         let timeBonus = 0;
         let difficultyScore = 0;
+        let usedPowerups = 0, totalHints = 0;
+        let gameStartTime = 0;
+        
+        // ============= Badge & Stats System =============
+        let badges = {
+            first_game: { icon: '🎮', name: 'เกมแรก', rarity: 'common', unlocked: false },
+            combo_master: { icon: '🔥', name: 'Combo Master (10+)', rarity: 'rare', unlocked: false },
+            perfect_score: { icon: '💯', name: 'Perfect (35 เพชร)', rarity: 'legend', unlocked: false },
+            speed_demon: { icon: '⚡', name: 'Speed (2+ นาที)', rarity: 'epic', unlocked: false },
+            powerup_collector: { icon: '⚙️', name: 'Power Collector', rarity: 'uncommon', unlocked: false },
+            all_stages: { icon: '🏆', name: 'ทั้ง 4 ด่าน', rarity: 'epic', unlocked: false },
+            expert: { icon: '🎓', name: 'Expert Mode', rarity: 'rare', unlocked: false }
+        };
+        
+        let gameStats = {
+            totalTime: 0,
+            levelsPassed: 0,
+            totalPlayed: 0,
+            bestCombo: 0,
+            totalDiamonds: 0
+        };
         
         const midCons = ['ก','จ','ด','ต','บ','ป','อ','ฎ','ฏ'];
         const highCons = ['ข','ฃ','ฉ','ฐ','ถ','ผ','ฝ','ศ','ษ','ส','ห'];
@@ -677,46 +886,92 @@
         const lowDouble = ['ค','ฅ','ฆ','ช','ซ','ฌ','ฑ','ฒ','ท','ธ','พ','ฟ','ภ','ฮ'];
         const allCons = [...midCons, ...highCons, ...lowSingle, ...lowDouble];
 
-        // ============= ข้อมูลคำถามพร้อมรูปภาพ & ความยาก & คำแนะนำ =============
-        const quizData = [
-            // อักษรกลาง (7 ข้อ)
-            {w:"ไก่", a:"กลาง", img:"https://cdn-icons-png.flaticon.com/512/2748/2748521.png", difficulty:"easy", hint:"สัตว์ที่ร้องโครอกครัก"},
-            {w:"จาน", a:"กลาง", img:"https://cdn-icons-png.flaticon.com/512/3050/3050159.png", difficulty:"easy", hint:"จานสำหรับใส่อาหาร"},
-            {w:"เด็ก", a:"กลาง", img:"https://cdn-icons-png.flaticon.com/512/5556/5556468.png", difficulty:"easy", hint:"บุคคลที่ยังเล็ก"},
-            {w:"เต่า", a:"กลาง", img:"https://cdn-icons-png.flaticon.com/512/3069/3069185.png", difficulty:"medium", hint:"สัตว์ที่เดินช้า"},
-            {w:"ใบไม้", a:"กลาง", img:"https://cdn-icons-png.flaticon.com/512/1534/1534989.png", difficulty:"easy", hint:"ส่วนของต้นไม้"},
-            {w:"ปลา", a:"กลาง", img:"https://cdn-icons-png.flaticon.com/512/2389/2389039.png", difficulty:"easy", hint:"สัตว์น้ำ"},
-            {w:"อ่าง", a:"กลาง", img:"https://cdn-icons-png.flaticon.com/512/1620/1620263.png", difficulty:"medium", hint:"ภาชนะใส่น้ำ"},
-            
-            // อักษรสูง (7 ข้อ)
-            {w:"ไข่", a:"สูง", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"easy", hint:"สัตว์ไก่ออกมา"},
-            {w:"ฉิ่ง", a:"สูง", img:"https://cdn-icons-png.flaticon.com/512/3531/3531653.png", difficulty:"hard", hint:"เครื่องดนตรี"},
-            {w:"ถุง", a:"สูง", img:"https://cdn-icons-png.flaticon.com/512/924/924515.png", difficulty:"medium", hint:"บรรจุภัณฑ์"},
-            {w:"ผึ้ง", a:"สูง", img:"https://cdn-icons-png.flaticon.com/512/985/985941.png", difficulty:"easy", hint:"สัตว์ที่ผลิตน้ำผึ้ง"},
-            {w:"ฝา", a:"สูง", img:"https://cdn-icons-png.flaticon.com/512/1995/1995506.png", difficulty:"medium", hint:"ปิดปากภาชนะ"},
-            {w:"ศาลา", a:"สูง", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"hard", hint:"สถานที่พัก"},
-            {w:"เสือ", a:"สูง", img:"https://cdn-icons-png.flaticon.com/512/1046/1046784.png", difficulty:"easy", hint:"สัตว์ลายดำส้ม"},
-            
-            // อักษรต่ำเดี่ยว (8 ข้อ)
-            {w:"งู", a:"ต่ำเดี่ยว", img:"https://cdn-icons-png.flaticon.com/512/1046/1046783.png", difficulty:"easy", hint:"สัตว์คลานไม่มีขา"},
-            {w:"เณร", a:"ต่ำเดี่ยว", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"hard", hint:"พระอยุธยา"},
-            {w:"หนู", a:"ต่ำเดี่ยว", img:"https://cdn-icons-png.flaticon.com/512/1046/1046782.png", difficulty:"easy", hint:"สัตว์เล็กมีหาง"},
-            {w:"ม้า", a:"ต่ำเดี่ยว", img:"https://cdn-icons-png.flaticon.com/512/1046/1046781.png", difficulty:"easy", hint:"สัตว์ที่มีขา 4 ขา"},
-            {w:"ยักษ์", a:"ต่ำเดี่ยว", img:"https://cdn-icons-png.flaticon.com/512/1046/1046780.png", difficulty:"hard", hint:"ตัวร้ายในนิทาน"},
-            {w:"เรือ", a:"ต่ำเดี่ยว", img:"https://cdn-icons-png.flaticon.com/512/985/985946.png", difficulty:"medium", hint:"ยานพาหนะในน้ำ"},
-            {w:"ลิง", a:"ต่ำเดี่ยว", img:"https://cdn-icons-png.flaticon.com/512/1046/1046779.png", difficulty:"easy", hint:"สัตว์ที่ชอบกล้วย"},
-            {w:"แหวน", a:"ต่ำเดี่ยว", img:"https://cdn-icons-png.flaticon.com/512/924/924512.png", difficulty:"medium", hint:"เครื่องประดับวง"},
-            
-            // อักษรต่ำคู่ (8 ข้อ)
-            {w:"ควาย", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/1046/1046781.png", difficulty:"medium", hint:"สัตว์บ้านตัวใหญ่"},
-            {w:"ช้าง", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/1046/1046777.png", difficulty:"easy", hint:"สัตว์ที่มีงา"},
-            {w:"โซ่", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/924/924516.png", difficulty:"medium", hint:"ห่วงโซ่เชื่อม"},
-            {w:"ทหาร", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/747/747376.png", difficulty:"medium", hint:"ผู้ป้องกันประเทศ"},
-            {w:"ธง", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/3304/3304572.png", difficulty:"easy", hint:"สัญลักษณ์ประเทศ"},
-            {w:"พาน", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/924/924517.png", difficulty:"hard", hint:"สำลัก"},
-            {w:"ฟัน", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/924/924518.png", difficulty:"easy", hint:"ในปาก"},
-            {w:"ภูมิใจ", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/1999/1999632.png", difficulty:"hard", hint:"ความรู้สึกภูมิใจ"}
+        // ============= ข้อมูลคำถาม 44 ข้อ (ก-ฮ) =============
+        const quizDataAll = [
+            // ก (4 ข้อ)
+            {w:"ไก่", a:"กลาง", img:"https://cdn-icons-png.flaticon.com/512/2748/2748521.png", difficulty:"easy", hint:"สัตว์ที่ร้องโครอก"},
+            {w:"กง", a:"กลาง", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"easy", hint:"เครื่องดนตรี"},
+            {w:"กะ", a:"กลาง", img:"https://cdn-icons-png.flaticon.com/512/924/924515.png", difficulty:"medium", hint:"ผ่านไป"},
+            {w:"กำ", a:"กลาง", img:"https://cdn-icons-png.flaticon.com/512/924/924516.png", difficulty:"easy", hint:"มือหมัด"},
+
+            // ข (4 ข้อ)
+            {w:"ไข่", a:"สูง", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"easy", hint:"ของไก่ออก"},
+            {w:"ขนม", a:"สูง", img:"https://cdn-icons-png.flaticon.com/512/1995/1995506.png", difficulty:"easy", hint:"อาหารหวาน"},
+            {w:"ขว้าง", a:"สูง", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"medium", hint:"โยนออกไป"},
+            {w:"ขี่", a:"สูง", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"medium", hint:"นั่งบน"},
+
+            // ค (4 ข้อ)
+            {w:"ควาย", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/1046/1046781.png", difficulty:"easy", hint:"สัตว์บ้านใหญ่"},
+            {w:"คน", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"easy", hint:"มนุษย์"},
+            {w:"คัน", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"medium", hint:"อยากขูด"},
+            {w:"คิด", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"easy", hint:"ใจคิด"},
+
+            // ง (4 ข้อ)
+            {w:"งู", a:"ต่ำเดี่ยว", img:"https://cdn-icons-png.flaticon.com/512/1046/1046783.png", difficulty:"easy", hint:"สัตว์คลาน"},
+            {w:"งาน", a:"ต่ำเดี่ยว", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"easy", hint:"การทำงาน"},
+            {w:"งั้น", a:"ต่ำเดี่ยว", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"medium", hint:"ดังนั้น"},
+            {w:"งาม", a:"ต่ำเดี่ยว", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"easy", hint:"สวย"},
+
+            // จ (4 ข้อ)
+            {w:"จาน", a:"กลาง", img:"https://cdn-icons-png.flaticon.com/512/3050/3050159.png", difficulty:"easy", hint:"ภาชนะใส่อาหาร"},
+            {w:"จน", a:"กลาง", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"medium", hint:"ยากจน"},
+            {w:"จำ", a:"กลาง", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"easy", hint:"จดจำ"},
+            {w:"จอ", a:"กลาง", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"easy", hint:"จอภาพ"},
+
+            // ฉ (4 ข้อ)
+            {w:"ฉัน", a:"สูง", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"easy", hint:"ตัวเอง"},
+            {w:"ฉิ่ง", a:"สูง", img:"https://cdn-icons-png.flaticon.com/512/3531/3531653.png", difficulty:"medium", hint:"เครื่องดนตรี"},
+            {w:"ฉลาด", a:"สูง", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"easy", hint:"ฉลาด"},
+            {w:"ฉีด", a:"สูง", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"medium", hint:"ฉีดยา"},
+
+            // ช (4 ข้อ)
+            {w:"ช้าง", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/1046/1046777.png", difficulty:"easy", hint:"สัตว์มีงา"},
+            {w:"ชาติ", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"medium", hint:"ประเทศ"},
+            {w:"ชน", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"easy", hint:"ชนกัน"},
+            {w:"ชรา", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"medium", hint:"แก่เฒ่า"},
+
+            // ซ (4 ข้อ)
+            {w:"ซ้อน", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/924/924516.png", difficulty:"medium", hint:"ซ้อนกัน"},
+            {w:"ซื้อ", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"easy", hint:"ซื้อของ"},
+            {w:"ซ่อม", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"medium", hint:"แก้ซ่อม"},
+            {w:"ซาด", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"hard", hint:"เศร้า"},
+
+            // ด (4 ข้อ)
+            {w:"เด็ก", a:"กลาง", img:"https://cdn-icons-png.flaticon.com/512/5556/5556468.png", difficulty:"easy", hint:"บุคคลเล็ก"},
+            {w:"ดิน", a:"กลาง", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"easy", hint:"ดินแดน"},
+            {w:"ดับ", a:"กลาง", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"medium", hint:"ดับไฟ"},
+            {w:"ดี", a:"กลาง", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"easy", hint:"ดีเยี่ยม"},
+
+            // ท (4 ข้อ)
+            {w:"ทหาร", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/747/747376.png", difficulty:"easy", hint:"ผู้ป้องกัน"},
+            {w:"ทำ", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"easy", hint:"กระทำ"},
+            {w:"ทาง", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"easy", hint:"เส้นทาง"},
+            {w:"ทาน", a:"ต่ำคู่", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"medium", hint:"บริจาค"},
+
+            // น (4 ข้อ)
+            {w:"หนู", a:"ต่ำเดี่ยว", img:"https://cdn-icons-png.flaticon.com/512/1046/1046782.png", difficulty:"easy", hint:"สัตว์เล็ก"},
+            {w:"นก", a:"ต่ำเดี่ยว", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"easy", hint:"สัตว์บิน"},
+            {w:"นม", a:"ต่ำเดี่ยว", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"easy", hint:"นมสด"},
+            {w:"นิ่ม", a:"ต่ำเดี่ยว", img:"https://cdn-icons-png.flaticon.com/512/924/924514.png", difficulty:"medium", hint:"นุ่มนวล"}
         ];
+
+        // ฟังก์ชันสำหรับดึง quizData ตามประเภท
+        function getQuizByType(type) {
+            switch(type) {
+                case 'high':
+                    return quizDataAll.filter(q => q.a === 'สูง');
+                case 'mid':
+                    return quizDataAll.filter(q => q.a === 'กลาง');
+                case 'low-single':
+                    return quizDataAll.filter(q => q.a === 'ต่ำเดี่ยว');
+                case 'low-double':
+                    return quizDataAll.filter(q => q.a === 'ต่ำคู่');
+                default:
+                    return quizDataAll;
+            }
+        }
+
+        let quizData = [];
         let quizIndex = 0;
 
         function switchScene(id) { document.querySelectorAll('.scene').forEach(s => s.classList.remove('active')); document.getElementById(id).classList.add('active'); }
@@ -756,6 +1011,8 @@
             playerName = document.getElementById('input-name').value;
             if(!playerName) { alert('พิมพ์ชื่อก่อนนะคะ!'); return; }
             playSfx('sfx-click');
+            unlockBadge('first_game');
+            document.getElementById('settings-btn').style.display = 'flex';
             switchScene('scene-char');
         }
 
@@ -784,6 +1041,7 @@
 
         function resumeStory() {
             stopAllBgm();
+            document.querySelector('.manual-link').classList.remove('hidden');
             document.getElementById('dialogue-popup').style.display = 'none';
             updateAvatarPosition(); 
 
@@ -829,6 +1087,7 @@
 
         function prepareMission() {
             switchScene('scene-game');
+            document.querySelector('.manual-link').classList.add('hidden');
             document.getElementById('quiz-container').style.display = 'none';
             document.getElementById('basket').style.display = 'none';
             let chest = document.getElementById('game-chest');
@@ -875,6 +1134,12 @@
             document.getElementById('game-hud').style.display = 'flex';
             document.getElementById('progress-bar').style.display = 'block';
             
+            // เลือก quizData ตามประเภท
+            if(storyProgress === 1) quizData = getQuizByType('high').slice(0, 44);
+            else if(storyProgress === 2) quizData = getQuizByType('mid').slice(0, 44);
+            else if(storyProgress === 3) quizData = getQuizByType('low-single').slice(0, 44);
+            else if(storyProgress === 4) quizData = getQuizByType('low-double').slice(0, 44);
+            
             let timeBonus = document.createElement('div');
             timeBonus.id = 'time-bonus-bar';
             timeBonus.className = 'time-bonus-bar';
@@ -885,11 +1150,11 @@
             let isBasket = (storyProgress === 2 || storyProgress === 4);
             if(isBasket) document.getElementById('basket').style.display = 'block';
 
-            let timeLeft = 180; 
+            let timeLeft = 300; // 5 นาที
             currentScore = 0; itemsSpawned = 0;
             scoreMultiplier = 1;
             activePowerups = { '2x': false, 'shield': false, 'slow': false };
-            document.getElementById('score').innerText = currentScore + "/20";
+            document.getElementById('score').innerText = currentScore + "/44";
             document.getElementById('timer').innerText = timeLeft;
 
             gameTimer = setInterval(() => {
@@ -906,13 +1171,13 @@
         }
 
         function updateProgressBar() {
-            let progress = (currentScore / 20) * 100;
+            let progress = (currentScore / 44) * 100;
             document.getElementById('progress-fill').style.width = progress + '%';
             document.getElementById('progress-fill').innerText = Math.round(progress) + '%';
         }
 
         function spawnItem() {
-            if(itemsSpawned >= 20) return; 
+            if(itemsSpawned >= 44) return; 
             itemsSpawned++;
 
             let targetArr = storyProgress === 1 ? midCons : storyProgress === 2 ? highCons : storyProgress === 3 ? lowSingle : lowDouble;
@@ -998,12 +1263,12 @@
             };
         }
 
-        function checkWinCondition() { if(currentScore >= 10) endGame(true); else endGame(false); }
+        function checkWinCondition() { if(currentScore >= 22) endGame(true); else endGame(false); }
 
         function getRewardData(score) {
-            if (score >= 16) return { stars: "⭐⭐⭐", d: 5 };
-            if (score >= 11) return { stars: "⭐⭐", d: 4 };
-            if (score >= 10) return { stars: "⭐", d: 3 };
+            if (score >= 35) return { stars: "⭐⭐⭐", d: 5 };
+            if (score >= 28) return { stars: "⭐⭐", d: 4 };
+            if (score >= 22) return { stars: "⭐", d: 3 };
             return { stars: "", d: 0 };
         }
 
@@ -1023,9 +1288,12 @@
             if(isWin) {
                 let reward = getRewardData(currentScore);
                 totalDiamonds += reward.d;
+                gameStats.levelsPassed++;
+                gameStats.totalDiamonds = totalDiamonds;
+                gameStats.bestCombo = Math.max(gameStats.bestCombo, maxCombo);
                 
                 if(reward.d > 0) createConfetti(50);
-                showStarRating(currentScore >= 16 ? 3 : currentScore >= 11 ? 2 : 1);
+                showStarRating(currentScore >= 35 ? 3 : currentScore >= 28 ? 2 : 1);
                 
                 if(storyProgress===1) scoresData.m1 = currentScore;
                 if(storyProgress===2) scoresData.m2 = currentScore;
@@ -1035,27 +1303,27 @@
                 sendDataToSheet();
 
                 let nextMsg = storyProgress === 3 ? "เตรียมตัวลุย อักษรต่ำคู่ ต่อเลย!" : "ไปด่านต่อไปกันเลย!";
-                Swal.fire({ title: `ผ่านด่าน!`, text: `ได้ ${currentScore}/20 คะแนน ${reward.stars}\n\n${nextMsg}`, icon: "success", confirmButtonColor: '#8b5a2b', allowOutsideClick: false })
+                Swal.fire({ title: `ผ่านด่าน!`, text: `ได้ ${currentScore}/44 คะแนน ${reward.stars}\n\n${nextMsg}`, icon: "success", confirmButtonColor: '#8b5a2b', allowOutsideClick: false })
                 .then(() => { 
                     if(storyProgress===0) { storyProgress = 1; } else { storyProgress++; } 
                     switchScene('scene-map'); resumeStory(); 
                 });
             } else {
-                Swal.fire({ title: "ไม่ผ่านด่าน!", text: `ได้ ${currentScore} คะแนน (ต้อง 10 ขึ้นไป)\nลองใหม่สู้ๆ!`, icon: "error", confirmButtonColor: '#d32f2f', allowOutsideClick: false })
+                Swal.fire({ title: "ไม่ผ่านด่าน!", text: `ได้ ${currentScore} คะแนน (ต้อง 22 ขึ้นไป)\nลองใหม่สู้ๆ!`, icon: "error", confirmButtonColor: '#d32f2f', allowOutsideClick: false })
                 .then(() => { switchScene('scene-map'); resumeStory(); }); 
             }
         }
 
-        // ================= บอสไฟต์ 30 ข้อ =================
+        // ================= บอสไฟต์ 44 ข้อ =================
         function startBossGame() {
             document.getElementById('game-hud').style.display = 'flex';
             document.getElementById('combo-display').style.display = 'block';
             document.getElementById('quiz-container').style.display = 'block';
-            let timeLeft = 300; 
+            let timeLeft = 1200; // 20 นาที
             currentScore = 0; quizIndex = 0; comboCount = 0;
             scoreMultiplier = 1;
             activePowerups = { '2x': false, 'shield': false, 'slow': false };
-            document.getElementById('score').innerText = currentScore + "/30";
+            document.getElementById('score').innerText = currentScore + "/44";
             document.getElementById('timer').innerText = timeLeft;
 
             quizData.sort(() => Math.random() - 0.5);
@@ -1068,7 +1336,7 @@
         }
 
         function showQuiz() {
-            if(quizIndex >= 30) { endBoss(); return; }
+            if(quizIndex >= 44) { endBoss(); return; }
             
             document.getElementById('quiz-current').innerText = quizIndex + 1;
             document.getElementById('quiz-word').innerText = quizData[quizIndex].w;
@@ -1117,7 +1385,7 @@
                 comboCount++;
                 if(comboCount > maxCombo) maxCombo = comboCount;
                 
-                document.getElementById('score').innerText = currentScore + "/30";
+                document.getElementById('score').innerText = currentScore + "/44";
                 document.getElementById('combo-count').innerText = comboCount;
                 
                 boss.classList.add('boss-hit');
@@ -1125,7 +1393,7 @@
                 
                 if(comboCount % 5 === 0) {
                     showAchievement('🔥 Combo x' + comboCount + '!');
-                    createConfetti(15);
+                    // ปิด confetti เพื่อลดความเน่า
                 }
                 
                 if(quizData[quizIndex].difficulty === 'hard') {
@@ -1160,8 +1428,8 @@
             document.getElementById('combo-display').style.display = 'none';
             stopAllBgm();
 
-            if(currentScore >= 10) {
-                let bossRatio = currentScore / 30;
+            if(currentScore >= 22) {
+                let bossRatio = currentScore / 44;
                 let bD = 0;
                 if(bossRatio >= 0.8) bD = 15;
                 else if (bossRatio >= 0.55) bD = 10;
@@ -1182,12 +1450,12 @@
 
                 Swal.fire({
                     title: "🏆 ยินดีด้วย คุณพิชิตป่าสำเร็จ!", 
-                    html: `<span style='font-size:35px;'>${finalStars}</span><br><br><b style="color:#ff6f00; font-size:18px;">${finalMsg}</b><br><br><span style="font-size:20px;">📊 คะแนนรวมทั้งหมด <b>${totalDiamonds}/35</b> เพชร 💎</span><br><span style="color:#ff6f00; font-size:16px;">🔥 Combo สูงสุด: <b>x${maxCombo}</b></span><br><span style="color:#2196f3; font-size:16px;">📈 คะแนนบอสไฟต์: <b>${currentScore}/30</b></span>`,
+                    html: `<span style='font-size:35px;'>${finalStars}</span><br><br><b style="color:#ff6f00; font-size:18px;">${finalMsg}</b><br><br><span style="font-size:20px;">📊 คะแนนรวมทั้งหมด <b>${totalDiamonds}/35</b> เพชร 💎</span><br><span style="color:#ff6f00; font-size:16px;">🔥 Combo สูงสุด: <b>x${maxCombo}</b></span><br><span style="color:#2196f3; font-size:16px;">📈 คะแนนบอสไฟต์: <b>${currentScore}/44</b></span>`,
                     imageUrl: 'https://cdn-icons-png.flaticon.com/512/4230/4230571.png', imageWidth: 150, 
                     confirmButtonText: '🎓 รับใบประกาศกับคุณครู!', confirmButtonColor: '#8bc34a', background: '#fff8e1', allowOutsideClick: false
                 }).then(() => { location.reload(); });
             } else {
-                Swal.fire({ title: "⚔️ ยังไม่ชนะบอส!", text: "ต้องถูกอย่างน้อย 10 ข้อ ลองใหม่นะ!", icon: "error", allowOutsideClick: false })
+                Swal.fire({ title: "⚔️ ยังไม่ชนะบอส!", text: "ต้องถูกอย่างน้อย 22 ข้อ ลองใหม่นะ!", icon: "error", allowOutsideClick: false })
                 .then(() => { startBossGame(); });
             }
         }
