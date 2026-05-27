@@ -89,12 +89,14 @@
         .wood-btn:active { transform: translateY(6px); box-shadow: 0 0 0 #4a2e15; }
 
         .manual-link {
-            position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
-            font-size: 15px; color: #ffca28; font-weight: bold;
-            text-decoration: none; cursor: pointer; text-shadow: 1px 1px 2px #4a2e15; z-index: 100;
-            transition: 0.2s; white-space: nowrap;
+            position: fixed; bottom: 15px; left: 15px;
+            font-size: 30px; cursor: pointer; z-index: 100;
+            transition: 0.2s; background: rgba(255,255,255,0.9); 
+            border-radius: 50%; width: 55px; height: 55px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
         }
-        .manual-link:hover { color: #fff; }
+        .manual-link:hover { transform: scale(1.1); }
 
         /* ปุ่มด้านบน (Home & Music) */
         .top-btn {
@@ -289,6 +291,67 @@
             from { transform: translateX(-50%) translateY(100px); opacity: 0; }
             to { transform: translateX(-50%) translateY(0); opacity: 1; }
         }
+
+        /* ================= Power-ups ================= */
+        .powerup {
+            position: absolute; width: 50px; height: 50px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 30px; cursor: pointer; z-index: 150; box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+            animation: floatPowerup 2s infinite ease-in-out;
+            border: 3px solid white;
+        }
+        .powerup-2x { background: linear-gradient(135deg, #ff9800, #ffb74d); } /* Double Points */
+        .powerup-shield { background: linear-gradient(135deg, #2196f3, #64b5f6); } /* Shield */
+        .powerup-slow { background: linear-gradient(135deg, #9c27b0, #ce93d8); } /* Slow Motion */
+
+        @keyframes floatPowerup {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(10deg); }
+        }
+
+        /* ================= Confetti ================= */
+        .confetti {
+            position: fixed; pointer-events: none; z-index: 9998;
+            animation: confettiFall 3s ease-out forwards;
+        }
+        @keyframes confettiFall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* ================= Streak Indicator ================= */
+        .streak-badge {
+            position: absolute; top: 70px; right: 15px; z-index: 1900;
+            background: linear-gradient(135deg, #ff6f00, #ff9100);
+            color: white; padding: 10px 20px; border-radius: 25px;
+            font-weight: bold; font-size: 16px; box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            display: none; animation: pulse 0.5s ease-out;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* ================= Time Bonus Bar ================= */
+        .time-bonus-bar {
+            position: absolute; bottom: 55px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 300px; height: 8px; background: rgba(0,0,0,0.5);
+            border: 2px solid #ffeb3b; border-radius: 5px; overflow: hidden; display: none; z-index: 100;
+        }
+        .time-bonus-fill {
+            height: 100%; background: linear-gradient(90deg, #ffeb3b, #ff9800);
+            transition: width 0.5s ease;
+        }
+
+        /* ================= Star Rating Display ================= */
+        .star-rating {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-size: 80px; z-index: 6000; animation: starPop 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+        @keyframes starPop {
+            0% { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(1) rotate(360deg); opacity: 0; }
+        }
     </style>
 </head>
 <body>
@@ -306,6 +369,9 @@
 
     <div class="top-btn" id="home-btn" onclick="location.reload()">🏠</div>
     <div class="top-btn" id="music-btn" onclick="toggleMusic()">🎵</div>
+    <div class="manual-link" onclick="showManual()">📖</div>
+
+    <div id="powerup-container" style="position: fixed; top: 80px; right: 15px; display: none; z-index: 1900; background: rgba(0,0,0,0.7); padding: 10px; border-radius: 10px; color: white; font-weight: bold; font-size: 14px; text-align: center; border: 2px solid #ffca28;"></div>
 
     <div id="scene-title" class="scene active">
         <div class="firefly" style="top: 20%; left: 30%; animation-duration: 3s;"></div>
@@ -316,8 +382,6 @@
             <h1 class="game-title">ตะลุยป่าไตรยางศ์</h1>
             <input type="text" id="input-name" placeholder="ชื่อนักสำรวจ..." autocomplete="off">
             <button class="wood-btn" onclick="goToCharSelect()">▶ เริ่มการผจญภัย</button>
-            
-            <div class="manual-link" onclick="showManual()">📖 คู่มือการเล่น</div>
         </div>
     </div>
 
@@ -410,6 +474,127 @@
         }
         createLeaves();
 
+        // ================= Confetti Effects =================
+        function createConfetti(count = 30) {
+            for(let i = 0; i < count; i++) {
+                let conf = document.createElement('div');
+                conf.className = 'confetti';
+                conf.style.left = Math.random() * 100 + 'vw';
+                conf.style.top = '-10px';
+                conf.style.width = (Math.random() * 10 + 5) + 'px';
+                conf.style.height = (Math.random() * 10 + 5) + 'px';
+                conf.style.background = ['#ffeb3b', '#ff9800', '#f44336', '#2196f3', '#4caf50', '#9c27b0'][Math.floor(Math.random() * 6)];
+                conf.style.animationDelay = (Math.random() * 0.5) + 's';
+                conf.style.transform = `rotateZ(${Math.random() * 360}deg)`;
+                document.body.appendChild(conf);
+                setTimeout(() => conf.remove(), 3500);
+            }
+        }
+
+        // ================= Show Star Rating =================
+        function showStarRating(stars) {
+            let el = document.createElement('div');
+            el.className = 'star-rating';
+            el.innerText = '⭐'.repeat(stars);
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 600);
+        }
+
+        // ================= Power-ups System =================
+        function spawnPowerup() {
+            if(Math.random() > 0.15) return; // 15% chance
+            
+            let types = [
+                { icon: '2️⃣', type: '2x', name: '2x คะแนน', duration: 8 },
+                { icon: '🛡️', type: 'shield', name: 'Shield', duration: 10 },
+                { icon: '⏱️', type: 'slow', name: 'Slow Motion', duration: 6 }
+            ];
+            
+            let chosen = types[Math.floor(Math.random() * types.length)];
+            let powerup = document.createElement('div');
+            powerup.className = 'powerup powerup-' + chosen.type;
+            powerup.innerText = chosen.icon;
+            powerup.style.left = Math.floor(Math.random() * 80) + 10 + '%';
+            powerup.style.top = '-50px';
+            
+            document.getElementById('game-area').appendChild(powerup);
+            
+            let pos = -50;
+            let fallSpeed = window.innerHeight / 250;
+            
+            let fall = setInterval(() => {
+                pos += fallSpeed;
+                powerup.style.top = pos + 'px';
+                if(pos > window.innerHeight) {
+                    clearInterval(fall); powerup.remove();
+                }
+            }, 20);
+
+            powerup.onclick = function(e) {
+                e.stopPropagation();
+                clearInterval(fall);
+                activatePowerup(chosen.type, chosen.name, chosen.duration);
+                this.remove();
+                playSfx('sfx-correct');
+                createConfetti(20);
+            };
+        }
+
+        function activatePowerup(type, name, duration) {
+            if(activePowerups[type]) return;
+            
+            activePowerups[type] = true;
+            
+            if(type === '2x') scoreMultiplier = 2;
+            else if(type === 'shield') {
+                // Shield absorbs 1 wrong answer
+            } else if(type === 'slow') {
+                // Slow down falling items
+                document.querySelectorAll('.game-item').forEach(item => {
+                    item.style.animationPlayState = 'paused';
+                });
+            }
+
+            let popup = document.getElementById('powerup-container');
+            popup.style.display = 'block';
+            popup.innerText = `✨ ${name} (${duration}s)`;
+            
+            setTimeout(() => {
+                activePowerups[type] = false;
+                scoreMultiplier = 1;
+                if(type === 'slow') {
+                    document.querySelectorAll('.game-item').forEach(item => {
+                        item.style.animationPlayState = 'running';
+                    });
+                }
+                popup.style.display = 'none';
+            }, duration * 1000);
+        }
+
+        // ================= Time Bonus System =================
+        function updateTimeBonus(timeLeft) {
+            if(timeLeft > 150) timeBonus = 5;
+            else if(timeLeft > 120) timeBonus = 4;
+            else if(timeLeft > 90) timeBonus = 3;
+            else if(timeLeft > 60) timeBonus = 2;
+            else if(timeLeft > 30) timeBonus = 1;
+            else timeBonus = 0;
+            
+            let bonusBar = document.getElementById('time-bonus-bar');
+            if(bonusBar) {
+                let fillPercent = Math.max(0, (timeLeft / 180) * 100);
+                document.getElementById('time-bonus-fill').style.width = fillPercent + '%';
+            }
+        }
+
+        // ================= Difficulty Multiplier =================
+        function calculateDifficultyBonus(difficulty) {
+            if(difficulty === 'easy') return 1;
+            if(difficulty === 'medium') return 1.5;
+            if(difficulty === 'hard') return 2;
+            return 1;
+        }
+
         function showFloatingText(txt, x, y, color) {
             let el = document.createElement('div');
             el.innerText = txt;
@@ -481,6 +666,10 @@
         let layoutCoords = []; 
         let comboCount = 0, maxCombo = 0;
         let hintUsed = false;
+        let activePowerups = {}; // { 2x: false, shield: false, slow: false }
+        let scoreMultiplier = 1;
+        let timeBonus = 0;
+        let difficultyScore = 0;
         
         const midCons = ['ก','จ','ด','ต','บ','ป','อ','ฎ','ฏ'];
         const highCons = ['ข','ฃ','ฉ','ฐ','ถ','ผ','ฝ','ศ','ษ','ส','ห'];
@@ -685,20 +874,35 @@
         function startGame() {
             document.getElementById('game-hud').style.display = 'flex';
             document.getElementById('progress-bar').style.display = 'block';
+            
+            let timeBonus = document.createElement('div');
+            timeBonus.id = 'time-bonus-bar';
+            timeBonus.className = 'time-bonus-bar';
+            timeBonus.style.display = 'block';
+            timeBonus.innerHTML = '<div class="time-bonus-fill" id="time-bonus-fill"></div>';
+            document.getElementById('scene-game').appendChild(timeBonus);
+
             let isBasket = (storyProgress === 2 || storyProgress === 4);
             if(isBasket) document.getElementById('basket').style.display = 'block';
 
             let timeLeft = 180; 
             currentScore = 0; itemsSpawned = 0;
+            scoreMultiplier = 1;
+            activePowerups = { '2x': false, 'shield': false, 'slow': false };
             document.getElementById('score').innerText = currentScore + "/20";
             document.getElementById('timer').innerText = timeLeft;
 
             gameTimer = setInterval(() => {
-                timeLeft--; document.getElementById('timer').innerText = timeLeft;
+                timeLeft--; 
+                document.getElementById('timer').innerText = timeLeft;
+                updateTimeBonus(timeLeft);
                 if(timeLeft <= 0) endGame(false);
             }, 1000);
 
-            spawnInterval = setInterval(spawnItem, 1500); 
+            spawnInterval = setInterval(() => {
+                spawnItem();
+                spawnPowerup();
+            }, 1500); 
         }
 
         function updateProgressBar() {
@@ -741,18 +945,23 @@
                 e.preventDefault(); clearInterval(fall);
                 
                 if(targetArr.includes(this.innerText)) {
-                    currentScore++; 
+                    let pointGain = 1 * scoreMultiplier;
+                    currentScore += pointGain; 
                     comboCount++;
                     if(comboCount > maxCombo) maxCombo = comboCount;
                     
                     document.getElementById('score').innerText = currentScore + "/20";
                     updateProgressBar();
-                    showFloatingText("+1", e.clientX, e.clientY, "#8bc34a");
+                    showFloatingText("+" + pointGain, e.clientX, e.clientY, "#8bc34a");
                     
                     if(comboCount >= 5) {
                         document.getElementById('combo-display').style.display = 'block';
                         document.getElementById('combo-count').innerText = comboCount;
                         showAchievement('🔥 Combo x' + comboCount + '!');
+                    }
+                    
+                    if(scoreMultiplier === 2) {
+                        showAchievement('2️⃣ Double Points!');
                     }
                     
                     if(isBasket) {
@@ -768,11 +977,17 @@
                         this.style.transform = "scale(0)";
                     }
                 } else {
-                    comboCount = 0;
-                    document.getElementById('combo-display').style.display = 'none';
-                    playSfx('sfx-wrong'); 
-                    showFloatingText("❌", e.clientX, e.clientY, "#f44336");
-                    this.style.background = "#d32f2f"; this.style.color = "#fff";
+                    if(activePowerups.shield) {
+                        activePowerups.shield = false;
+                        showAchievement('🛡️ Shield Saved You!');
+                        this.style.background = "#ffc107"; this.style.color = "#000";
+                    } else {
+                        comboCount = 0;
+                        document.getElementById('combo-display').style.display = 'none';
+                        playSfx('sfx-wrong'); 
+                        showFloatingText("❌", e.clientX, e.clientY, "#f44336");
+                        this.style.background = "#d32f2f"; this.style.color = "#fff";
+                    }
                     this.style.transform = "scale(0)";
                 }
 
@@ -799,11 +1014,18 @@
             document.getElementById('progress-bar').style.display = 'none';
             document.getElementById('combo-display').style.display = 'none';
             document.getElementById('basket').style.display = 'none';
+            
+            let timeBonus = document.getElementById('time-bonus-bar');
+            if(timeBonus) timeBonus.remove();
+            
             stopAllBgm();
             
             if(isWin) {
                 let reward = getRewardData(currentScore);
                 totalDiamonds += reward.d;
+                
+                if(reward.d > 0) createConfetti(50);
+                showStarRating(currentScore >= 16 ? 3 : currentScore >= 11 ? 2 : 1);
                 
                 if(storyProgress===1) scoresData.m1 = currentScore;
                 if(storyProgress===2) scoresData.m2 = currentScore;
@@ -831,6 +1053,8 @@
             document.getElementById('quiz-container').style.display = 'block';
             let timeLeft = 300; 
             currentScore = 0; quizIndex = 0; comboCount = 0;
+            scoreMultiplier = 1;
+            activePowerups = { '2x': false, 'shield': false, 'slow': false };
             document.getElementById('score').innerText = currentScore + "/30";
             document.getElementById('timer').innerText = timeLeft;
 
@@ -884,18 +1108,29 @@
 
         function checkQuiz(ans, event) {
             let boss = document.getElementById('boss-sprite');
+            let diffBonus = calculateDifficultyBonus(quizData[quizIndex].difficulty);
             
             if(quizData[quizIndex].a === ans) {
-                playSfx('sfx-correct'); currentScore++; comboCount++;
+                playSfx('sfx-correct'); 
+                let pointGain = Math.round(1 * diffBonus);
+                currentScore += pointGain; 
+                comboCount++;
                 if(comboCount > maxCombo) maxCombo = comboCount;
                 
                 document.getElementById('score').innerText = currentScore + "/30";
                 document.getElementById('combo-count').innerText = comboCount;
                 
                 boss.classList.add('boss-hit');
-                showFloatingText("+1", event.clientX, event.clientY, "#8bc34a");
+                showFloatingText("+" + pointGain, event.clientX, event.clientY, "#8bc34a");
                 
-                if(comboCount >= 5) showAchievement('🔥 Combo x' + comboCount + '!');
+                if(comboCount % 5 === 0) {
+                    showAchievement('🔥 Combo x' + comboCount + '!');
+                    createConfetti(15);
+                }
+                
+                if(quizData[quizIndex].difficulty === 'hard') {
+                    showAchievement('💪 ยาก! +' + pointGain + ' โบนัส');
+                }
                 
                 setTimeout(() => boss.classList.remove('boss-hit'), 300);
             } else { 
@@ -934,22 +1169,25 @@
                 totalDiamonds += bD;
                 scoresData.m4 = currentScore;
                 
+                createConfetti(60);
+                showStarRating(bossRatio >= 0.8 ? 3 : bossRatio >= 0.55 ? 2 : 1);
+                
                 sendDataToSheet();
 
                 let finalStars = "";
                 let finalMsg = "";
-                if(totalDiamonds >= 28) { finalStars = "⭐⭐⭐"; finalMsg = "ได้รับคะแนนเต็ม + ของรางวัล!"; } 
-                else if(totalDiamonds >= 19) { finalStars = "⭐⭐"; finalMsg = "ได้รับคะแนนครึ่งหนึ่ง + ของรางวัล!"; } 
-                else { finalStars = "⭐"; finalMsg = "ได้รับแค่คะแนน (ไม่มีของรางวัล)"; }
+                if(totalDiamonds >= 28) { finalStars = "⭐⭐⭐ PERFECT!"; finalMsg = "ได้รับคะแนนเต็ม + ของรางวัล!"; } 
+                else if(totalDiamonds >= 19) { finalStars = "⭐⭐ EXCELLENT"; finalMsg = "ได้รับคะแนนครึ่งหนึ่ง + ของรางวัล!"; } 
+                else { finalStars = "⭐ GREAT"; finalMsg = "ได้รับแค่คะแนน (ไม่มีของรางวัล)"; }
 
                 Swal.fire({
-                    title: "ยินดีด้วย คุณพิชิตป่าสำเร็จ!", 
-                    html: `<span style='font-size:30px;'>${finalStars}</span><br><b>${finalMsg}</b><br><br>คะแนนรวมทั้งหมด ${totalDiamonds} / 35 เพชร 💎<br><b style="color:#ff6f00;">🔥 Combo สูงสุด: x${maxCombo}</b>`,
+                    title: "🏆 ยินดีด้วย คุณพิชิตป่าสำเร็จ!", 
+                    html: `<span style='font-size:35px;'>${finalStars}</span><br><br><b style="color:#ff6f00; font-size:18px;">${finalMsg}</b><br><br><span style="font-size:20px;">📊 คะแนนรวมทั้งหมด <b>${totalDiamonds}/35</b> เพชร 💎</span><br><span style="color:#ff6f00; font-size:16px;">🔥 Combo สูงสุด: <b>x${maxCombo}</b></span><br><span style="color:#2196f3; font-size:16px;">📈 คะแนนบอสไฟต์: <b>${currentScore}/30</b></span>`,
                     imageUrl: 'https://cdn-icons-png.flaticon.com/512/4230/4230571.png', imageWidth: 150, 
-                    confirmButtonText: 'รับใบประกาศกับคุณครู!', confirmButtonColor: '#8bc34a', background: '#fff8e1', allowOutsideClick: false
+                    confirmButtonText: '🎓 รับใบประกาศกับคุณครู!', confirmButtonColor: '#8bc34a', background: '#fff8e1', allowOutsideClick: false
                 }).then(() => { location.reload(); });
             } else {
-                Swal.fire({ title: "ไม่ผ่าน!", text: "ต้องถูกอย่างน้อย 10 ข้อ ลองใหม่นะ!", icon: "error", allowOutsideClick: false })
+                Swal.fire({ title: "⚔️ ยังไม่ชนะบอส!", text: "ต้องถูกอย่างน้อย 10 ข้อ ลองใหม่นะ!", icon: "error", allowOutsideClick: false })
                 .then(() => { startBossGame(); });
             }
         }
