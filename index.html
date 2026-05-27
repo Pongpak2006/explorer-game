@@ -19,8 +19,6 @@
             --icon-temple: url('https://i.postimg.cc/Bb3bsPrk/5.png'); 
             --chest-closed: url('https://cdn-icons-png.flaticon.com/512/4230/4230569.png');
             --chest-open: url('https://cdn-icons-png.flaticon.com/512/4230/4230571.png');
-            --boss-mask: url('https://cdn-icons-png.flaticon.com/512/2983/2983610.png'); /* รูปหน้ากากบอส */
-            --leaf: url('https://cdn-icons-png.flaticon.com/512/3264/3264104.png'); /* รูปใบไม้ร่วง */
         }
 
         * { font-family: 'Sarabun', sans-serif; box-sizing: border-box; }
@@ -38,7 +36,7 @@
         }
         .scene.active { display: flex; }
 
-        /* ================= เอฟเฟกต์บรรยากาศ (หิ่งห้อย & ใบไม้ร่วง) ================= */
+        /* ================= เอฟเฟกต์หิ่งห้อยเรืองแสง ================= */
         .firefly {
             position: absolute; width: 4px; height: 4px; background: #cddc39;
             border-radius: 50%; box-shadow: 0 0 10px 4px #cddc39;
@@ -46,28 +44,11 @@
         }
         @keyframes fly { 0% { transform: translate(0, 0) scale(1); opacity: 0.5; } 100% { transform: translate(30px, -50px) scale(1.5); opacity: 1; } }
 
-        .falling-leaf {
-            position: absolute; top: -50px; width: 25px; height: 25px;
-            background: var(--leaf) no-repeat center/contain;
-            pointer-events: none; z-index: 3; opacity: 0.6;
-            animation: fall linear infinite;
-        }
-        @keyframes fall {
-            0% { transform: translate(0, 0) rotate(0deg); opacity: 0; }
-            10% { opacity: 0.7; }
-            90% { opacity: 0.7; }
-            100% { transform: translate(60px, 100vh) rotate(360deg); opacity: 0; }
-        }
-
-        /* ================= UI หน้าแรก (ลายไม้สมจริง) ================= */
+        /* ================= UI หน้าแรก ================= */
         .wood-panel {
-            position: relative; /* สำคัญมาก เพื่อให้ลิงก์คู่มืออิงตำแหน่งจากกล่องนี้ */
-            padding: 30px 30px 45px 30px; /* เพิ่มพื้นที่ด้านล่าง 45px ไว้ใส่คู่มือ */
-            background-color: #8b5a2b;
-            background-image: repeating-linear-gradient(45deg, rgba(0,0,0,0.05) 0px, rgba(0,0,0,0.05) 2px, transparent 2px, transparent 4px), linear-gradient(to bottom, #a1662f, #70431c);
-            border: 6px solid #4a2e15; border-radius: 20px;
+            background: #a1662f; border: 6px solid #4a2e15; border-radius: 20px;
             box-shadow: inset 0 0 15px rgba(0,0,0,0.5), 0 15px 25px rgba(0,0,0,0.8);
-            text-align: center; width: 85%; max-width: 420px; z-index: 100;
+            padding: 30px; text-align: center; width: 85%; max-width: 420px; z-index: 100;
         }
         .game-title {
             white-space: nowrap !important;
@@ -88,14 +69,14 @@
         }
         .wood-btn:active { transform: translateY(6px); box-shadow: 0 0 0 #4a2e15; }
 
-        /* คู่มือ (อยู่ล่างสุดของป้ายไม้) */
+        /* ย้ายคู่มือมาล่างสุดของหน้าจอ ไม่ให้รกป้ายไม้ */
         .manual-link {
-            position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
-            font-size: 15px; color: #ffca28; font-weight: bold;
-            text-decoration: none; cursor: pointer; text-shadow: 1px 1px 2px #4a2e15; z-index: 100;
-            transition: 0.2s; white-space: nowrap;
+            position: absolute; bottom: 15px;
+            font-size: 16px; color: rgba(255, 255, 255, 0.7);
+            text-decoration: none; cursor: pointer; text-shadow: 1px 1px 2px #000; z-index: 100;
+            transition: 0.2s;
         }
-        .manual-link:hover { color: #fff; }
+        .manual-link:hover { color: #ffca28; }
 
         /* ปุ่มด้านบน (Home & Music) */
         .top-btn {
@@ -193,26 +174,13 @@
             display: none; z-index: 100; pointer-events: none;
         }
 
-        /* ================= บอสไฟต์ (มีตัวบอส) ================= */
         #quiz-container {
             background: rgba(255,255,255,0.95); border: 6px solid #4a2e15; border-radius: 20px;
             padding: 20px; width: 90%; max-width: 400px; text-align: center; display: none; z-index: 300;
             max-height: 90vh; overflow-y: auto;
         }
-        
-        #boss-sprite {
-            width: 110px; height: 110px; margin: -55px auto 10px auto; 
-            background: var(--boss-mask) center/contain no-repeat;
-            filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));
-            animation: bossHover 2s infinite alternate; transition: 0.3s;
-        }
-        @keyframes bossHover { 0% { transform: translateY(0); } 100% { transform: translateY(-10px); } }
-        
-        /* เอฟเฟกต์บอสโดนตี */
-        .boss-hit { filter: drop-shadow(0 0 15px red) brightness(0.7) sepia(1) hue-rotate(-50deg) saturate(5) !important; transform: scale(0.9); }
-
         .quiz-question { font-size: 26px; color: #d32f2f; font-weight: 900; margin-bottom: 15px; }
-        .quiz-img-display { width: 150px; height: 150px; object-fit: contain; margin-bottom: 10px; border-radius: 10px; display: none; border: 2px dashed #4a2e15; padding: 5px; margin: 0 auto; }
+        .quiz-img-display { width: 150px; height: 150px; object-fit: contain; margin-bottom: 10px; border-radius: 10px; display: none; border: 2px dashed #4a2e15; padding: 5px; }
         .quiz-btn {
             display: block; width: 100%; background: #4caf50; border: 4px solid #1b5e20;
             color: white; font-size: 20px; font-weight: bold; padding: 10px; border-radius: 15px;
@@ -245,9 +213,9 @@
             <h1 class="game-title">ตะลุยป่าไตรยางศ์</h1>
             <input type="text" id="input-name" placeholder="ชื่อนักสำรวจ..." autocomplete="off">
             <button class="wood-btn" onclick="goToCharSelect()">▶ เริ่มการผจญภัย</button>
-            
-            <div class="manual-link" onclick="showManual()">📖 คู่มือการเล่น</div>
         </div>
+        
+        <div class="manual-link" onclick="showManual()">📖 คู่มือการเล่น</div>
     </div>
 
     <div id="scene-char" class="scene">
@@ -297,60 +265,19 @@
         <div id="basket"></div>
         
         <div id="quiz-container">
-            <div id="boss-sprite"></div>
-
             <img id="quiz-img" class="quiz-img-display" src="">
             <div class="quiz-question">คำว่า "<span id="quiz-word">ไก่</span>" <br>หมู่อักษรใด?</div>
-            <button class="quiz-btn" onclick="checkQuiz('กลาง', event)">อักษรกลาง</button>
-            <button class="quiz-btn" style="background: #f44336; border-color: #b71c1c;" onclick="checkQuiz('สูง', event)">อักษรสูง</button>
-            <button class="quiz-btn" style="background: #2196f3; border-color: #0d47a1;" onclick="checkQuiz('ต่ำเดี่ยว', event)">อักษรต่ำเดี่ยว</button>
-            <button class="quiz-btn" style="background: #9c27b0; border-color: #6a1b9a;" onclick="checkQuiz('ต่ำคู่', event)">อักษรต่ำคู่</button>
+            <button class="quiz-btn" onclick="checkQuiz('กลาง')">อักษรกลาง</button>
+            <button class="quiz-btn" style="background: #f44336; border-color: #b71c1c;" onclick="checkQuiz('สูง')">อักษรสูง</button>
+            <button class="quiz-btn" style="background: #2196f3; border-color: #0d47a1;" onclick="checkQuiz('ต่ำเดี่ยว')">อักษรต่ำเดี่ยว</button>
+            <button class="quiz-btn" style="background: #9c27b0; border-color: #6a1b9a;" onclick="checkQuiz('ต่ำคู่')">อักษรต่ำคู่</button>
         </div>
     </div>
 
     <script>
+        // ลิงก์ Google Sheets ของคุณครู
         const sheetUrl = "https://script.google.com/macros/s/AKfycbxQHu86mWczbFPaJ_JGHih5nIHxMye7S01qevDns2KSYDs5_lHWVOIFqJ8TUHc15TfY/exec";
 
-        // ================= ใบไม้ร่วง (เพิ่มความสวยงาม) =================
-        function createLeaves() {
-            const container = document.getElementById('scene-map');
-            for(let i=0; i<8; i++) {
-                let leaf = document.createElement('div');
-                leaf.className = 'falling-leaf';
-                leaf.style.left = Math.random() * 100 + 'vw';
-                leaf.style.animationDuration = (6 + Math.random() * 6) + 's';
-                leaf.style.animationDelay = (Math.random() * 5) + 's';
-                container.appendChild(leaf);
-            }
-        }
-        createLeaves();
-
-        // ================= เอฟเฟกต์ตัวเลขเด้ง (+1 / ❌) =================
-        function showFloatingText(txt, x, y, color) {
-            let el = document.createElement('div');
-            el.innerText = txt;
-            el.style.position = 'fixed';
-            el.style.left = x + 'px';
-            el.style.top = y + 'px';
-            el.style.color = color;
-            el.style.fontSize = '40px';
-            el.style.fontWeight = '900';
-            el.style.textShadow = '2px 2px 0 #000, -1px -1px 0 #fff';
-            el.style.pointerEvents = 'none';
-            el.style.zIndex = '9999';
-            el.style.transition = 'all 0.8s ease-out';
-            document.body.appendChild(el);
-            
-            // Force reflow
-            void el.offsetWidth;
-            
-            el.style.top = (y - 80) + 'px';
-            el.style.opacity = '0';
-            
-            setTimeout(() => el.remove(), 800);
-        }
-
-        // ================= คู่มือการใช้งาน =================
         function showManual() {
             Swal.fire({
                 title: '📖 คู่มือการเล่น',
@@ -613,7 +540,6 @@
                 
                 if(targetArr.includes(this.innerText)) {
                     currentScore++; document.getElementById('score').innerText = currentScore + "/20";
-                    showFloatingText("+1", e.clientX, e.clientY, "#8bc34a"); // เอฟเฟกต์ตัวเลขเด้ง
                     
                     if(isBasket) {
                         playSfx('sfx-drop');
@@ -629,7 +555,6 @@
                     }
                 } else {
                     playSfx('sfx-wrong'); 
-                    showFloatingText("❌", e.clientX, e.clientY, "#f44336"); // เอฟเฟกต์ผิด
                     this.style.background = "#d32f2f"; this.style.color = "#fff";
                     this.style.transform = "scale(0)";
                 }
@@ -680,7 +605,7 @@
             }
         }
 
-        // ================= บอสไฟต์ 30 ข้อ =================
+        // ================= บอสไฟต์ 30 ข้อ 5 นาที =================
         function startBossGame() {
             document.getElementById('game-hud').style.display = 'flex';
             document.getElementById('quiz-container').style.display = 'block';
@@ -705,26 +630,18 @@
             let imgEl = document.getElementById('quiz-img');
             if(quizData[quizIndex].img) {
                 imgEl.src = quizData[quizIndex].img;
-                imgEl.style.display = 'block';
+                imgEl.style.display = 'inline-block';
             } else {
                 imgEl.style.display = 'none';
             }
         }
 
-        function checkQuiz(ans, event) {
-            let boss = document.getElementById('boss-sprite');
-            
+        function checkQuiz(ans) {
             if(quizData[quizIndex].a === ans) {
                 playSfx('sfx-correct'); currentScore++; 
                 document.getElementById('score').innerText = currentScore + "/30";
-                
-                // บอสโดนโจมตี
-                boss.classList.add('boss-hit');
-                showFloatingText("+1", event.clientX, event.clientY, "#8bc34a");
-                setTimeout(() => boss.classList.remove('boss-hit'), 300);
             } else { 
                 playSfx('sfx-wrong'); 
-                showFloatingText("❌", event.clientX, event.clientY, "#f44336");
                 let container = document.getElementById('quiz-container');
                 container.style.transform = "translateX(-10px)";
                 setTimeout(() => container.style.transform = "translateX(10px)", 50);
