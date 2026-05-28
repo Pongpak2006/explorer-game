@@ -22,7 +22,7 @@
             --boss-mask: url('https://cdn-icons-png.flaticon.com/512/2983/2983610.png');
             --leaf: url('https://cdn-icons-png.flaticon.com/512/3264/3264104.png');
             /* ตัวแปรสำหรับเปลี่ยนรูปกระเป๋าในภารกิจที่ 2 และ 3 คุณแก้ลิงก์ตรงนี้ได้เลย */
-            --basket-img: url('https://cdn-icons-png.flaticon.com/512/924/924514.png'); 
+            --basket-img: url('https://i.postimg.cc/y862Gr4g/d-sin-th-y-ngmi-di-t-ngch-x-(23).png'); 
         }
 
         * { font-family: 'Sarabun', sans-serif; box-sizing: border-box; }
@@ -108,7 +108,7 @@
             font-size: 24px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.5); transition: 0.1s;
         }
         .top-btn:active { transform: scale(0.9); }
-        /* ปิดการแสดงผลปุ่มหน้าหลักจากโครงสร้างเดิมเด็ดขาด */
+        /* ซ่อนปุ่มโฮมเดิม เพื่อใช้ตัวที่สร้างใหม่ใน JS เรียงแนวตั้งซ้าย */
         #home-btn { display: none !important; }
         #music-btn { right: 15px; border-color: #1976d2; display: flex !important; }
         #settings-btn { right: 70px; border-color: #4caf50; display: flex !important; }
@@ -204,16 +204,16 @@
             border: 3px solid !important; white-space: nowrap !important;
         }
         /* คะแนนสีเขียวเข้ม , เวลาสีแดงสว่าง */
-        .hud > div:first-of-type { border-color: #2e7d32 !important; color: #2e7d32 !important; }
-        .hud > div:last-of-type { border-color: #ef5350 !important; color: #ef5350 !important; }
+        .hud > div:first-of-type { border-color: #1b5e20 !important; color: #1b5e20 !important; }
+        .hud > div:last-of-type { border-color: #e53935 !important; color: #e53935 !important; }
 
         @media (max-width: 768px) {
-            /* ในมือถือดันลงมาเพื่อหลบไอคอนด้านบน */
-            .hud { top: 75px !important; gap: 10px !important; width: max-content !important; justify-content: center !important;}
+            /* ในมือถือดันลงมาเล็กน้อยให้หลบไอคอนด้านบนและย่อขนาด */
+            .hud { top: 75px !important; gap: 10px !important; width: auto !important; justify-content: center !important;}
             .hud > div { font-size: 16px !important; padding: 6px 12px !important; flex: none !important; border-width: 2px !important;}
         }
 
-        /* ================= Left Menu Panel (จัดซ้าย แนวตั้ง 3 ปุ่ม) ================= */
+        /* ================= Left Menu Panel (จัดซ้าย ล่างหน้าหลัก เหลือ 3 ปุ่ม) ================= */
         .bottom-menu { display: none !important; } /* ซ่อนเมนูเก่า HTML เดิม ให้หมด */
 
         #left-menu-container {
@@ -250,10 +250,10 @@
             .left-btn::after { font-size: 20px !important; }
         }
 
-        /* ================= Badge/Medal System (แนวตั้งทางซ้าย ต่อจากเมนู 3 ปุ่ม) ================= */
+        /* ================= Badge/Medal System (เรียงต่อจากเมนูซ้าย) ================= */
         #badge-container {
             position: absolute !important; top: 200px !important; left: 15px !important; z-index: 1900 !important;
-            display: none !important; /* ซ่อนตอนแรก */
+            display: none !important; /* ซ่อนตอนแรก แสดงเฉพาะหน้า Map */
             flex-direction: column !important; gap: 10px !important; max-width: 50px !important;
             background: transparent !important; border: none !important; box-shadow: none !important; padding: 0 !important;
         }
@@ -292,14 +292,14 @@
             color: #fff; font-size: 12px; font-weight: bold; text-shadow: 1px 1px 2px #000;
         }
 
-        /* ตะกร้า ย้ายมาไว้ข้างบน (ใต้แถบคะแนน) ในด่านที่ 2 และ 3.2 */
+        /* ตะกร้า ย้ายมาไว้ข้างล่างแต่ลอยอยู่เหนือแถบเหลืองนิดนึง */
         #basket {
-            position: absolute !important; top: 120px !important; bottom: auto !important; left: 50% !important; transform: translateX(-50%) !important;
-            width: 140px !important; height: 140px !important; 
-            background: url('https://i.postimg.cc/y862Gr4g/d-sin-th-y-ngmi-di-t-ngch-x-(23).png') center/contain no-repeat !important;
+            position: absolute !important; bottom: 55px !important; top: auto !important; left: 50% !important; transform: translateX(-50%) !important;
+            width: 140px !important; height: 110px !important; 
+            background: var(--basket-img) center/contain no-repeat !important;
             display: none; z-index: 100; pointer-events: none;
         }
-        @media (max-width: 768px) { #basket { width: 110px !important; height: 110px !important; top: 120px !important; } }
+        @media (max-width: 768px) { #basket { width: 120px !important; height: 90px !important; bottom: 55px !important; } }
 
         /* ================= บอสไฟต์ (ภาพลอยด้านบน กล่องพื้นขาว) ================= */
         #quiz-container {
@@ -610,17 +610,18 @@
 
         // ================= JS: สร้างปุ่มเมนูซ้าย 3 ปุ่ม =================
         document.addEventListener("DOMContentLoaded", () => {
-            // สร้างเมนูซ้ายใหม่ (ซ่อนไว้ก่อน)
+            // สร้างเมนูซ้ายใหม่ (ซ่อนไว้ก่อนเมื่อเปิดมาหน้าแรก)
             let leftMenu = document.createElement('div');
             leftMenu.id = 'left-menu-container';
 
             // 1. ปุ่ม หน้าหลัก (บ้าน - ขอบแดง)
             let btnHome = document.createElement('a');
+            btnHome.id = 'new-home-btn';
             btnHome.className = 'left-btn left-btn-home';
             btnHome.setAttribute('data-icon', '🏠');
             btnHome.onclick = function(e) {
                 e.preventDefault();
-                // ซ่อนเมนู
+                // ซ่อนเมนูทั้งหมดตอนกลับหน้าแรก
                 leftMenu.style.setProperty('display', 'none', 'important');
                 document.getElementById('badge-container').style.setProperty('display', 'none', 'important');
                 goHome();
@@ -629,6 +630,7 @@
 
             // 2. ปุ่ม เริ่มเกมใหม่ (รีเฟรช - ขอบน้ำเงิน)
             let btnRestart = document.createElement('a');
+            btnRestart.id = 'new-restart-btn';
             btnRestart.className = 'left-btn left-btn-restart';
             btnRestart.setAttribute('data-icon', '🔄');
             btnRestart.onclick = function(e) {
@@ -639,11 +641,12 @@
 
             // 3. ปุ่ม เปลี่ยนคู่หู (คน - ขอบม่วง)
             let btnChar = document.createElement('a');
+            btnChar.id = 'new-char-btn';
             btnChar.className = 'left-btn left-btn-char';
             btnChar.setAttribute('data-icon', '👥');
             btnChar.onclick = function(e) {
                 e.preventDefault();
-                // ซ่อนเมนู
+                // ซ่อนเมนูตอนเข้าหน้าเลือกคู่หู
                 leftMenu.style.setProperty('display', 'none', 'important');
                 document.getElementById('badge-container').style.setProperty('display', 'none', 'important');
                 switchScene('scene-char');
@@ -653,7 +656,7 @@
             // นำใส่เข้า Body
             document.body.appendChild(leftMenu);
             
-            // ซ่อนและล้างคำสั่งปุ่มโฮมเดิมออก ป้องกันการทับซ้อน
+            // ซ่อนและล้างคำสั่งปุ่มโฮมเดิมออก ป้องกันการทับซ้อนและโชว์มั่ว
             let oldHome = document.getElementById('home-btn');
             if(oldHome) {
                 oldHome.style.setProperty('display', 'none', 'important');
@@ -768,12 +771,12 @@
             powerup.innerText = chosen.icon;
             powerup.style.left = Math.floor(Math.random() * 80) + 10 + '%';
             
-            // หลีกเลี่ยงให้พาวเวอร์อัพไม่ซ้อนกับเวลาในโทรศัพท์ (ดันลงมาหน่อย)
-            powerup.style.top = '110px';
+            // หลีกเลี่ยงให้พาวเวอร์อัพไม่ซ้อนกับเวลาในโทรศัพท์ (ดันลงมาเพื่อให้ร่วงต่ำกว่าแถบ HUD)
+            powerup.style.top = '130px';
             
             document.getElementById('game-area').appendChild(powerup);
             
-            let pos = 110;
+            let pos = 130;
             let fallSpeed = window.innerHeight / 250;
             
             let fall = setInterval(() => {
@@ -878,15 +881,15 @@
                     <b style="color:#d32f2f;">🎮 วิธีเล่น (ก-ฮ):</b><br><br>
                     <b>📌 ภารกิจที่ 1-2 (กลาง, สูง):</b><br>
                     &nbsp;&nbsp;• เวลา: 4 นาทีต่อภารกิจ<br>
-                    &nbsp;&nbsp;• ร่วงทั้งหมด 55 ข้อ ต้องเก็บข้อถูก 10 ข้อขึ้นไป เพื่อผ่านด่าน<br><br>
+                    &nbsp;&nbsp;• ร่วงทั้งหมด 55 ข้อ ต้องเก็บข้อถูกให้ได้ 10 ข้อขึ้นไป เพื่อผ่านด่าน<br><br>
                     <b>📌 ภารกิจที่ 3 (แยกเป็น 2 ภารกิจย่อย):</b><br>
-                    &nbsp;&nbsp;• ต่ำเดี่ยว (4 นาที) ร่วง 55 ตัว ต้องเก็บข้อถูก 10 ข้อขึ้นไป<br>
-                    &nbsp;&nbsp;• ต่ำคู่ (4 นาที) ร่วง 55 ตัว ต้องเก็บข้อถูก 10 ข้อขึ้นไป<br><br>
+                    &nbsp;&nbsp;• ต่ำเดี่ยว (4 นาที) ร่วง 55 ตัว ต้องเก็บข้อถูกให้ได้ 10 ข้อขึ้นไป<br>
+                    &nbsp;&nbsp;• ต่ำคู่ (4 นาที) ร่วง 55 ตัว ต้องเก็บข้อถูกให้ได้ 10 ข้อขึ้นไป<br><br>
                     <b>📌 ภารกิจที่ 4 (บอสไฟต์รวม):</b><br>
                     &nbsp;&nbsp;• 44 ข้อ (เวลา: 10 นาที)<br>
                     &nbsp;&nbsp;• ต้องตอบถูก 22 ข้อขึ้นไป เพื่อชนะบอส<br><br>
                     <b style="color:#ff6f00;">💎 เกณฑ์เพชร:</b><br>
-                    ภารกิจ 1-3 = ผ่านด่านละ 20 เพชร (ภารกิจ 3 จะเฉลี่ยรวมกันเป็น 20 เพชร)<br>
+                    ภารกิจ 1-3 = ผ่านด่านละ 20 เพชร (ภารกิจ 3 จะเอาคะแนน 2 รอบมารวมและหารเฉลี่ยให้ได้ 20)<br>
                     บอสไฟต์ = ได้รับเพิ่มสูงสุด 5 เพชร รวมทั้งหมด 65 เพชร
                     </div>`;
             } else {
@@ -1077,6 +1080,7 @@
         function enterMap(gender) {
             playSfx('sfx-click');
             
+            // Hardcode URL ภาพคู่หู
             const urlBoy = 'url("https://i.postimg.cc/Wb5dHjNY/d-sin-th-y-ngmi-di-t-ngch-x-(22).png")';
             const urlGirl = 'url("https://i.postimg.cc/YqRFBY3z/d-sin-th-y-ngmi-di-t-ngch-x-(21).png")';
             document.getElementById('map-avatar').style.backgroundImage = (gender === 'boy') ? urlBoy : urlGirl;
@@ -1110,9 +1114,16 @@
             document.querySelector('.manual-link').classList.remove('hidden');
             document.getElementById('dialogue-popup').style.display = 'none';
             
-            // กลับมาหน้า Map ต้องโชว์เมนูและ Badge
+            // ตอนอยู่หน้า Map ให้โชว์เมนูเสมอ
             let leftMenu = document.getElementById('left-menu-container');
             if(leftMenu) leftMenu.style.setProperty('display', 'flex', 'important');
+            
+            // โชว์ปุ่ม 2 อันที่เหลือกลับมา (เผื่อถูกซ่อนไปตอนเล่นเกม)
+            let btnRestart = document.getElementById('new-restart-btn');
+            if(btnRestart) btnRestart.style.setProperty('display', 'flex', 'important');
+            let btnChar = document.getElementById('new-char-btn');
+            if(btnChar) btnChar.style.setProperty('display', 'flex', 'important');
+
             if(Object.values(badges).some(b => b.unlocked)) {
                 document.getElementById('badge-container').style.setProperty('display', 'flex', 'important');
             }
@@ -1212,9 +1223,11 @@
             document.getElementById('game-hud').style.display = 'flex';
             document.getElementById('progress-bar').style.display = 'block';
             
-            // ซ่อนเมนูฝั่งซ้ายตอนเล่นเกมเพื่อไม่ให้บัง
-            let leftMenu = document.getElementById('left-menu-container');
-            if(leftMenu) leftMenu.style.setProperty('display', 'none', 'important');
+            // ซ่อนปุ่ม เริ่มใหม่, เปลี่ยนคู่หู, และ Badge ตอนเล่นเกม เพื่อไม่ให้บังจอ
+            let btnRestart = document.getElementById('new-restart-btn');
+            if(btnRestart) btnRestart.style.setProperty('display', 'none', 'important');
+            let btnChar = document.getElementById('new-char-btn');
+            if(btnChar) btnChar.style.setProperty('display', 'none', 'important');
             let badgeCon = document.getElementById('badge-container');
             if(badgeCon) badgeCon.style.setProperty('display', 'none', 'important');
 
@@ -1259,12 +1272,12 @@
             if(isBasket) {
                 let basketEl = document.getElementById('basket');
                 basketEl.style.display = 'block';
-                // นำตะกร้าไปไว้ด้านบนสุด ใต้แถบคะแนน/เวลา ตามที่สั่ง
-                basketEl.style.setProperty('top', '90px', 'important');
-                basketEl.style.setProperty('bottom', 'auto', 'important');
+                // นำตะกร้ามาไว้ข้างล่างแต่ลอยอยู่เหนือแถบความคืบหน้า เพื่อไม่ให้บังเวลาเล่น
+                basketEl.style.setProperty('bottom', '55px', 'important');
+                basketEl.style.setProperty('top', 'auto', 'important');
             }
 
-            let timeLeft = 240; // ปรับเป็น 4 นาที ตามบรีฟ
+            let timeLeft = 240; // 4 นาที ตามบรีฟ
             currentScore = 0; itemsSpawned = 0;
             scoreMultiplier = 1;
             activePowerups = { '2x': false, 'shield': false, 'slow': false };
@@ -1312,9 +1325,8 @@
             item.className = 'game-item'; item.innerText = char;
             item.style.left = Math.floor(Math.random() * 80) + 10 + '%';
             
-            // ให้เริ่มหล่นจากระดับใต้ตะกร้า เพื่อไม่ให้บังตะกร้าที่อยู่ด้านบน
-            let isBasket = (storyProgress === 2 || storyProgress === 4);
-            let startY = isBasket ? 220 : 90;
+            // ให้เริ่มหล่นจากระดับใต้แถบคะแนน/เวลา 
+            let startY = 130; 
             item.style.top = startY + 'px'; 
             
             document.getElementById('game-area').appendChild(item);
@@ -1329,6 +1341,8 @@
                     clearInterval(fall); item.remove();
                 }
             }, 20);
+
+            let isBasket = (storyProgress === 2 || storyProgress === 4);
 
             item.onpointerdown = function(e) {
                 e.preventDefault(); clearInterval(fall);
@@ -1391,7 +1405,7 @@
             };
         }
 
-        // เช็คเงื่อนไขผ่าน: ได้คะแนน 10 คะแนนขึ้นไป (ตามคำสั่งใหม่)
+        // กฎการผ่านด่าน: ต้องเก็บให้ได้ 10 คะแนนขึ้นไป จึงจะผ่านด่าน 1-4 (ตามที่คุณบรีฟใหม่)
         function checkWinCondition() { 
             let passMark = (storyProgress === 5) ? 22 : 10; 
             if(currentScore >= passMark) endGame(true); else endGame(false); 
@@ -1461,9 +1475,11 @@
             document.getElementById('combo-display').style.display = 'block';
             document.getElementById('quiz-container').style.display = 'block';
             
-            // ซ่อนเมนูด้านซ้ายและ Badge
-            let leftMenu = document.getElementById('left-menu-container');
-            if(leftMenu) leftMenu.style.setProperty('display', 'none', 'important');
+            // ซ่อนปุ่ม เริ่มเกมใหม่, เปลี่ยนตัวละคร และ Badge
+            let btnRestart = document.getElementById('new-restart-btn');
+            if(btnRestart) btnRestart.style.setProperty('display', 'none', 'important');
+            let btnChar = document.getElementById('new-char-btn');
+            if(btnChar) btnChar.style.setProperty('display', 'none', 'important');
             let badgeCon = document.getElementById('badge-container');
             if(badgeCon) badgeCon.style.setProperty('display', 'none', 'important');
 
